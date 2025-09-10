@@ -1049,35 +1049,19 @@
     function activateCheat() {
         const inputKey = document.getElementById('activationKey').value.trim();
         const errorMsg = document.getElementById('errorMsg');
-        const activationModal = document.getElementById('activationModal');
         
         if (inputKey === ACTIVATION_KEY) {
             isActivated = true;
             errorMsg.style.display = 'none';
             
-            // Анимация исчезновения модального окна
-            activationModal.style.opacity = '0';
-            activationModal.style.transform = 'translate(-50%, -50%) scale(0.9)';
-            
-            setTimeout(() => {
-                activationModal.style.display = 'none';
-                document.getElementById('launchButton').style.display = 'flex';
-                activationModal.style.opacity = '1';
-                activationModal.style.transform = 'translate(-50%, -50') scale(1)';
-            }, 300);
+            // Просто скрываем модальное окно
+            document.getElementById('activationModal').style.display = 'none';
+            document.getElementById('launchButton').style.display = 'flex';
             
             localStorage.setItem('frogaim_activated', 'true');
             
         } else {
             errorMsg.style.display = 'block';
-            errorMsg.style.animation = 'shake 0.5s ease';
-            
-            // Анимация тряски поля ввода
-            document.getElementById('activationKey').style.animation = 'shake 0.5s ease';
-            setTimeout(() => {
-                document.getElementById('activationKey').style.animation = '';
-            }, 500);
-            
             setTimeout(() => {
                 errorMsg.style.display = 'none';
             }, 3000);
@@ -1086,27 +1070,14 @@
 
     function showCheatMenu() {
         if (isActivated) {
-            const mainWindow = document.getElementById('mainWindow');
-            const launchButton = document.getElementById('launchButton');
-            
-            mainWindow.style.display = 'block';
-            launchButton.style.display = 'none';
+            document.getElementById('mainWindow').style.display = 'block';
+            document.getElementById('launchButton').style.display = 'none';
         }
     }
 
     function hideCheatMenu() {
-        const mainWindow = document.getElementById('mainWindow');
-        const launchButton = document.getElementById('launchButton');
-        
-        mainWindow.style.opacity = '0';
-        mainWindow.style.transform = 'translate(-50%, -50%) scale(0.9)';
-        
-        setTimeout(() => {
-            mainWindow.style.display = 'none';
-            launchButton.style.display = 'flex';
-            mainWindow.style.opacity = '1';
-            mainWindow.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, 300);
+        document.getElementById('mainWindow').style.display = 'none';
+        document.getElementById('launchButton').style.display = 'flex';
     }
 
     function switchTab(tabIndex) {
@@ -1466,4 +1437,5 @@
             document.getElementById('launchButton').style.display = 'flex';
         }
     });
-</script>
+    </script>
+                            
