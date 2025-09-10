@@ -18,29 +18,29 @@ jobs:
       with:
         node-version: '18'
 
-    - name: Install Cordova
+    - name: Install dependencies
       run: |
-        npm install -g cordova@11.0.0
+        npm install -g @capacitor/cli
+        npm install @capacitor/core @capacitor/android
 
-    - name: Create Cordova project
+    - name: Initialize Capacitor
       run: |
-        cordova create android-app com.frogaim.cheat FrogAIM
-        cp -r www/* android-app/www/
-        cp config.xml android-app/
+        npx cap init FrogAIM com.frogaim.cheat --web-dir www
+        npx cap add android
 
-    - name: Add Android platform (compatible version)
+    - name: Copy web files
       run: |
-        cd android-app
-        cordova platform add android@10.1.2
+        cp -r www/* android/app/src/main/assets/public/
+        cp config.xml android/app/src/main/assets/public/
 
     - name: Build Android APK
       run: |
-        cd android-app
-        cordova build android
+        cd android
+        ./gradlew assembleDebug
 
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
       with:
         name: FrogAIM-APK
-        path: android-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
         retention-days: 7
