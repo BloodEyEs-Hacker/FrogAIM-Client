@@ -11,35 +11,39 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
 
     - name: Install Cordova
       run: |
         npm install -g cordova
+        npm install
 
     - name: Create Cordova project
       run: |
         cordova create android-app com.frogaim.cheat FrogAIM
         cp -r www/* android-app/www/
         cp config.xml android-app/
+        cp package.json android-app/
 
     - name: Add Android platform
       run: |
         cd android-app
-        cordova platform add android
+        cordova platform add android@11.0.0
 
-    - name: Build APK
+    - name: Build Android APK
       run: |
         cd android-app
-        cordova build android
+        cordova build android --release
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
       with:
         name: FrogAIM-APK
-        path: android-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        path: android-app/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        retention-days: 7
