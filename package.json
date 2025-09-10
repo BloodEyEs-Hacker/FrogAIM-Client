@@ -4,8 +4,7 @@
   "description": "FrogAIM for PUBG Mobile 4.0",
   "main": "index.js",
   "scripts": {
-    "build": "npx cap build",
-    "android": "npx cap open android"
+    "build": "npx cap build"
   },
   "keywords": [
     "pubg",
