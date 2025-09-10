@@ -11,11 +11,10 @@
     
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="22" />
-    <preference name="android-targetSdkVersion" value="33" />
+    <preference name="android-targetSdkVersion" value="31" />
     <preference name="Orientation" value="portrait" />
     
     <platform name="android">
         <allow-intent href="market:*" />
-        <!-- Убираем ссылку на несуществующую иконку -->
     </platform>
 </widget>
