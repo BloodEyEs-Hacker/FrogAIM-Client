@@ -83,7 +83,8 @@ jobs:
 </manifest>
 EOL
 
-        # Создаём styles.xml
+    - name: Create styles.xml
+      run: |
         cat > android/app/src/main/res/values/styles.xml << 'EOL'
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -111,7 +112,8 @@ EOL
 </resources>
 EOL
 
-        # Создаём colors.xml
+    - name: Create colors.xml
+      run: |
         cat > android/app/src/main/res/values/colors.xml << 'EOL'
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -121,7 +123,8 @@ EOL
 </resources>
 EOL
 
-        # Создаём splash.xml
+    - name: Create splash.xml
+      run: |
         cat > android/app/src/main/res/drawable/splash.xml << 'EOL'
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
