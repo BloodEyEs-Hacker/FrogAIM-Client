@@ -2,18 +2,12 @@
   "appId": "com.frogaim.cheat",
   "appName": "FrogAIM",
   "webDir": "www",
-  "bundledWebRuntime": false,
   "android": {
-    "allowMixedContent": true,
-    "permissions": [
-      "SYSTEM_ALERT_WINDOW"
-    ],
-    "overrideUserAgent": "FrogAIM/4.0"
+    "allowMixedContent": true
   },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 0,
-      "backgroundColor": "#000000"
+      "launchShowDuration": 0
     }
   }
 }
