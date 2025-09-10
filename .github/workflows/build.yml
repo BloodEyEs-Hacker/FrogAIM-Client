@@ -1,0 +1,45 @@
+name: Build FrogAIM APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Cordova
+      run: |
+        npm install -g cordova
+
+    - name: Create Cordova project
+      run: |
+        cordova create android-app com.frogaim.cheat FrogAIM
+        cp -r www/* android-app/www/
+        cp config.xml android-app/
+
+    - name: Add Android platform
+      run: |
+        cd android-app
+        cordova platform add android
+
+    - name: Build APK
+      run: |
+        cd android-app
+        cordova build android
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: FrogAIM-APK
+        path: android-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
