@@ -4,8 +4,8 @@
   "description": "FrogAIM for PUBG Mobile 4.0",
   "main": "index.js",
   "scripts": {
-    "build": "cordova build android",
-    "prepare": "cordova platform add android"
+    "build": "npx cap build",
+    "android": "npx cap open android"
   },
   "keywords": [
     "pubg",
@@ -15,8 +15,11 @@
   ],
   "author": "FrogAIM Team",
   "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0"
+  },
   "devDependencies": {
-    "cordova": "^12.0.0",
-    "cordova-android": "^11.0.0"
+    "@capacitor/cli": "^5.0.0"
   }
 }
