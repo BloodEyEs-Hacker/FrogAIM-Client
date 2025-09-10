@@ -1,0 +1,21 @@
+{
+  "name": "frogaim-pubg-cheat",
+  "version": "4.0.0",
+  "description": "FrogAIM for PUBG Mobile 4.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "cordova build android",
+    "prepare": "cordova platform add android"
+  },
+  "keywords": [
+    "pubg",
+    "cheat",
+    "mobile",
+    "frogaim"
+  ],
+  "author": "FrogAIM Team",
+  "license": "MIT",
+  "devDependencies": {
+    "cordova-android": "^11.0.0"
+  }
+}
