@@ -4,6 +4,14 @@
   "webDir": "www",
   "bundledWebRuntime": false,
   "android": {
-    "allowMixedContent": true
+    "allowMixedContent": true,
+    "permissions": [
+      "SYSTEM_ALERT_WINDOW"
+    ]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
   }
 }
