@@ -26,118 +26,20 @@ jobs:
     - name: Initialize Capacitor
       run: |
         npx cap init FrogAIM com.frogaim.cheat --web-dir www
-        # Удаляем старую платформу если существует
         rm -rf android 2>/dev/null || true
-
-    - name: Add Android platform
-      run: |
         npx cap add android
 
-    - name: Copy web files to Android assets
+    - name: Copy web files
       run: |
         mkdir -p android/app/src/main/assets/public
         cp -r www/* android/app/src/main/assets/public/
 
-    - name: Create AndroidManifest.xml
-      run: |
-        mkdir -p android/app/src/main/res/values
-        mkdir -p android/app/src/main/res/drawable
-        
-        # Создаём AndroidManifest.xml
-        cat > android/app/src/main/AndroidManifest.xml << 'EOL'
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.frogaim.cheat">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="FrogAIM"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
-
-        <activity
-            android:name="com.frogaim.cheat.MainActivity"
-            android:exported="true"
-            android:label="FrogAIM"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
-            android:windowSoftInputMode="adjustResize">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
-
-    </application>
-
-</manifest>
-EOL
-
-    - name: Create styles.xml
-      run: |
-        cat > android/app/src/main/res/values/styles.xml << 'EOL'
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">#8a2be2</item>
-        <item name="colorPrimaryDark">#4b0082</item>
-        <item name="colorAccent">#00ff00</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
-
-</resources>
-EOL
-
-    - name: Create colors.xml
-      run: |
-        cat > android/app/src/main/res/values/colors.xml << 'EOL'
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="colorPrimary">#8a2be2</color>
-    <color name="colorPrimaryDark">#4b0082</color>
-    <color name="colorAccent">#00ff00</color>
-</resources>
-EOL
-
-    - name: Create splash.xml
-      run: |
-        cat > android/app/src/main/res/drawable/splash.xml << 'EOL'
-<?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@android:color/black"/>
-</layer-list>
-EOL
-
-    - name: Build Android APK
+    - name: Build APK
       run: |
         cd android
         ./gradlew assembleDebug
 
-    - name: Upload APK artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: FrogAIM-APK
