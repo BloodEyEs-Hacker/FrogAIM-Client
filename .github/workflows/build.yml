@@ -17,30 +17,21 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: '**/package.json'
 
-    - name: Generate package-lock.json
+    - name: Install Cordova
       run: |
-        npm init -y
-        npm install cordova@12.0.0 --save-dev
-        npm install cordova-android@11.0.0 --save-dev
-
-    - name: Install Cordova globally
-      run: |
-        npm install -g cordova@12.0.0
+        npm install -g cordova@11.0.0
 
     - name: Create Cordova project
       run: |
         cordova create android-app com.frogaim.cheat FrogAIM
         cp -r www/* android-app/www/
         cp config.xml android-app/
-        cp package.json android-app/
 
-    - name: Add Android platform
+    - name: Add Android platform (compatible version)
       run: |
         cd android-app
-        cordova platform add android@11.0.0
+        cordova platform add android@10.1.2
 
     - name: Build Android APK
       run: |
