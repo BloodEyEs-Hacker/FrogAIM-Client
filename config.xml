@@ -16,6 +16,6 @@
     
     <platform name="android">
         <allow-intent href="market:*" />
-        <icon src="res/icon.png" />
+        <!-- Убираем ссылку на несуществующую иконку -->
     </platform>
 </widget>
